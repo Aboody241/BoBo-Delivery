@@ -1,5 +1,4 @@
 import 'package:bobo/consts/routes/routes.dart';
-import 'package:bobo/features/on_board/pages/on_board_page.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -7,8 +6,10 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, AppRoutes.onBoarding);
+    Future.delayed(const Duration(seconds: 3), () {
+      if (context.mounted) {
+        Navigator.pushReplacementNamed(context, AppRoutes.onBoarding);
+      }
     });
 
     return Scaffold(

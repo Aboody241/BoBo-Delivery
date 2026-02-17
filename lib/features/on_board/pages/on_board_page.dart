@@ -41,7 +41,7 @@ class _OnBoardPageState extends State<OnBoardPage> {
         curve: Curves.easeOut,
       );
     } else {
-      // ������ ���?�� ��' Get Started
+      // Get Started
       _onSkip();
     }
   }
@@ -70,14 +70,14 @@ class _OnBoardPageState extends State<OnBoardPage> {
 
           DotsIndicator(
             dotsCount: 3,
-            position: _currentPage.toDouble(), // �Y'^ �"�����. double
+            position: _currentPage.toDouble(), // double
             animate: true,
             animationDuration: const Duration(milliseconds: 400),
             decorator: DotsDecorator(
               size: Size(12.w, 12.w), // ���. ���"���'���� ���"�������S��
               activeSize: Size(
-                18.w,
-                18.w,
+                14.w,
+                14.w,
               ), // ���. ���"���'���� ���"�.�?���'�"��
 
               activeColor: AppColors.lightPrimary600,
@@ -85,7 +85,7 @@ class _OnBoardPageState extends State<OnBoardPage> {
             ),
           ),
 
-          Gap(20.h),
+          Gap(40.h),
 
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -150,7 +150,7 @@ class _OnBoardPageState extends State<OnBoardPage> {
             ),
           ),
 
-          Gap(80.h),
+          Gap(40.h),
         ],
       ),
     );

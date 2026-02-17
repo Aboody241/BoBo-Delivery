@@ -3,7 +3,6 @@ import 'package:bobo/consts/routes/routes.dart';
 import 'package:bobo/features/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:bobo/features/on_board/pages/on_board_page.dart';
 import 'package:bobo/consts/theme/colors.dart';
 
 void main() {

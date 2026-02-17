@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 class AppRoutes {
   static const String splash = '/';
-  static const String login = '/login';
   static const String onBoarding = '/onBoarding';
   static const String onBoardingAuth = '/onBoardingAuth';
   static const String profile = '/profile';
@@ -17,14 +16,21 @@ class AppRoutes {
           builder: (_) => const SplashScreen(),
         );
 
-      case login:
+      case onBoarding:
+        return MaterialPageRoute(
+          builder: (_) => const OnBoardPage(),
+        );
+
+      case onBoardingAuth:
         return MaterialPageRoute(
           builder: (_) => const OnBoardingAuth(),
         );
 
-      case onBoarding:
+      case profile:
         return MaterialPageRoute(
-          builder: (_) => const OnBoardPage(),
+          builder: (_) => const Scaffold(
+            body: Center(child: Text("Profile Page")),
+          ),
         );
 
       default:
