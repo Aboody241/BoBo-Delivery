@@ -1,6 +1,7 @@
-import 'package:bobo/consts/theme/colors.dart';
-import 'package:bobo/consts/theme/fonts.dart';
-import 'package:bobo/consts/widgets/custom_buttons.dart';
+import 'package:bobo/core/consts/routes/routes.dart';
+import 'package:bobo/core/consts/theme/colors.dart';
+import 'package:bobo/core/consts/theme/fonts.dart';
+import 'package:bobo/core/consts/widgets/custom_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
@@ -13,7 +14,7 @@ class OnBoardingAuth extends StatelessWidget {
     final List<IconData> icons = [
       FontAwesomeIcons.google,
       FontAwesomeIcons.apple,
-      FontAwesomeIcons.phone,
+      Icons.email,
     ];
 
     return Scaffold(
@@ -48,12 +49,12 @@ class OnBoardingAuth extends StatelessWidget {
               ),
               textColor: AppColors.white,
             ),
-Gap(10),
-            
+            Gap(10),
+
             Text(
               "OR",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: AppColors.darkGrey300,
               ),
@@ -62,9 +63,18 @@ Gap(10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AuthButtons(icon: icons[0]),
-                AuthButtons(icon: icons[1]),
-                AuthButtons(icon: icons[2]),
+                AuthButtons(
+                  icon: icons[0],
+                  onTap: () {
+                  },
+                ),
+                AuthButtons(icon: icons[1], onTap: () {}),
+                AuthButtons(
+                  icon: icons[2],
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.loginscreen);
+                  },
+                ),
               ],
             ),
           ],
@@ -75,26 +85,23 @@ Gap(10),
 }
 
 class AuthButtons extends StatelessWidget {
-  const AuthButtons({super.key, required this.icon});
+  const AuthButtons({super.key, required this.icon, required this.onTap});
 
   final IconData icon;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(12),
-      onTap: () {
-        // TODO: handle social login
-      },
+      onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 15, horizontal: 42),
         decoration: BoxDecoration(
           color: AppColors.lightPrimary100,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Center(
-          child: Icon(icon, size: 24, color: AppColors.lightPrimary600),
-        ),
+        child: Center(child: Icon(icon, size: 24, color: AppColors.black)),
       ),
     );
   }

@@ -1,6 +1,6 @@
-import 'package:bobo/consts/routes/routes.dart';
-import 'package:bobo/consts/theme/colors.dart';
-import 'package:bobo/consts/theme/fonts.dart';
+import 'package:bobo/core/consts/routes/routes.dart';
+import 'package:bobo/core/consts/theme/colors.dart';
+import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:bobo/features/on_board/widgets/on_board_model.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';

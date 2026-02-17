@@ -1,4 +1,4 @@
-import 'package:bobo/consts/routes/routes.dart';
+import 'package:bobo/core/consts/routes/routes.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatelessWidget {

@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'package:bobo/consts/routes/routes.dart';
+import 'package:bobo/core/consts/routes/routes.dart';
 import 'package:bobo/features/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:bobo/consts/theme/colors.dart';
+import 'package:bobo/core/consts/theme/colors.dart';
 
 void main() {
   // Add error handling for the entire app

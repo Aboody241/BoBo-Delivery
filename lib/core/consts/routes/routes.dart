@@ -1,3 +1,4 @@
+import 'package:bobo/features/auth/login/pages/login_page_screen.dart';
 import 'package:bobo/features/on_board/pages/on_board_page.dart';
 import 'package:bobo/features/on_board/pages/on_boarding_auth.dart';
 import 'package:bobo/features/splash/splash_screen.dart';
@@ -8,6 +9,8 @@ class AppRoutes {
   static const String onBoarding = '/onBoarding';
   static const String onBoardingAuth = '/onBoardingAuth';
   static const String profile = '/profile';
+  static const String loginscreen = '/loginscreen';
+  
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -31,6 +34,11 @@ class AppRoutes {
           builder: (_) => const Scaffold(
             body: Center(child: Text("Profile Page")),
           ),
+        );
+
+      case loginscreen:
+        return MaterialPageRoute(
+          builder: (_) => const LoginPageScreen(),
         );
 
       default:

@@ -1,5 +1,5 @@
-import 'package:bobo/consts/theme/colors.dart';
-import 'package:bobo/consts/theme/fonts.dart';
+import 'package:bobo/core/consts/theme/colors.dart';
+import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:flutter/material.dart';
 
 class OnBoardModel {
