@@ -11,7 +11,7 @@ class TitledText extends StatelessWidget {
     return Text(
       title,
       style: AppTextStyle.poppinsHeading1.copyWith(
-        fontSize: 35,
+        fontSize: 32,
         fontWeight: FontWeight.bold,
       ),
     );

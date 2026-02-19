@@ -17,35 +17,34 @@ class LoginPageScreen extends StatefulWidget {
 class _LoginPageScreenState extends State<LoginPageScreen> {
   final TextEditingController emailcon = TextEditingController();
   final TextEditingController passlcon = TextEditingController();
-  bool isbuttoninabled = false;
 
-  @override
-  void initState() {
-    super.initState();
+  bool isButtonEnabled = false;
 
-    passlcon.addListener(() {
-      setState(() {
-        isbuttoninabled = passlcon.text.isNotEmpty;
-      });
+  void validator() {
+    setState(() {
+      isButtonEnabled = emailcon.text.isNotEmpty && passlcon.text.isNotEmpty;
     });
   }
 
   @override
+  void initState() {
+    super.initState();
+    emailcon.addListener(validator);
+    passlcon.addListener(validator);
+  }
+
+  @override
   void dispose() {
+    emailcon.dispose();
     passlcon.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool isvisable = true;
-
-    final String email = 'email';
-    final String pass = 'pass';
-
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60),
+        preferredSize: const Size.fromHeight(60),
         child: CenterLogoAndBackAppbar(),
       ),
       body: LayoutBuilder(
@@ -54,23 +53,28 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: IntrinsicHeight(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TitledText(title: 'Log in to your \naccount'),
-                      Gap(20),
-                      Passwordfields(
+                      const TitledText(title: 'Log in to your \naccount'),
+                      const Gap(20),
+
+                      // Email field (normal text)
+                      BasicTextField(
                         controller: emailcon,
-                        hintText: 'email address',
+                        hintText: 'Email address',
                       ),
-                      Gap(15),
+                      const Gap(15),
+
+                      // Password field
                       Passwordfields(
                         controller: passlcon,
-                        hintText: 'password',
-                        
+                        hintText: 'Password',
                       ),
+
+                      // Forget Password
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -90,26 +94,41 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                           ),
                         ],
                       ),
-                      Spacer(),
+
+                      const Spacer(),
+
+                      // Login button
                       _LoginButton(
-                        onPressed: isbuttoninabled ? () {} : null,
+                        onPressed: isButtonEnabled
+                            ? () {
+                                // Add your login logic here
+                              }
+                            : null,
                         text: 'Log in',
                       ),
-                      Gap(5),
+
+                      const Gap(5),
+
+                      // Sign up
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Don’t have an account?'),
+                          const Text('Don’t have an account?'),
                           TextButton(
-                            onPressed: () {},
-                            child: Text(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                context,
+                                AppRoutes.createAccount,
+                              );
+                            },
+                            child: const Text(
                               'Sign up',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],
                       ),
-                      Gap(20),
+                      const Gap(20),
                     ],
                   ),
                 ),
@@ -133,17 +152,17 @@ class _LoginButton extends StatelessWidget {
     final bool isDisabled = onPressed == null;
 
     return SizedBox(
-      width: double.infinity, // Full width
-      height: 55, // نفس الارتفاع اللي في الصورة
+      width: double.infinity,
+      height: 55,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          elevation: 0, // مفيش ظل
+          elevation: 0,
           backgroundColor: isDisabled
               ? AppColors.darkGrey400
-              : AppColors.lightPrimary600, // الأخضر
+              : AppColors.lightPrimary600,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18), // Rounded قوي
+            borderRadius: BorderRadius.circular(18),
           ),
         ),
         child: Text(

@@ -61,7 +61,7 @@ class Passwordfields extends StatefulWidget {
 }
 
 class _PasswordfieldsState extends State<Passwordfields> {
-  bool isvisable = false;
+  bool isvisable = true;
 
   @override
   Widget build(BuildContext context) {
@@ -94,8 +94,8 @@ class _PasswordfieldsState extends State<Passwordfields> {
             });
           },
           icon: isvisable
-              ? Icon(Icons.visibility_off_rounded)
-              : Icon(Icons.remove_red_eye),
+              ? Icon(Icons.visibility_off_outlined)
+              : Icon(Icons.remove_red_eye_outlined),
         ),
       ),
     );
