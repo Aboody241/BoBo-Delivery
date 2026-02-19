@@ -1,3 +1,4 @@
+import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
@@ -9,32 +10,134 @@ class CustomButton extends StatelessWidget {
     this.textColor = Colors.white,
   });
 
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed; // لازم تبقى nullable
   final String text;
   final LinearGradient gradient;
   final Color textColor;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: gradient,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Center(
+    final bool isDisabled = onPressed == null;
+
+    return SizedBox(
+      width: double.infinity,
+      height: 55,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(18),
+          gradient: isDisabled ? null : gradient,
+          color: isDisabled ? Colors.grey.shade400 : null,
+        ),
         child: ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 12),
-            backgroundColor: Colors.transparent, // مهم جدًا
-            shadowColor: Colors.transparent,     // يشيل الظل
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(18),
             ),
           ),
           child: Text(
             text,
-            style: TextStyle(color: textColor , fontSize: 18,fontWeight: FontWeight.w600 , fontFamily: 'Poppins'),
+            style: TextStyle(
+              color: isDisabled ? Colors.white70 : textColor,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'Poppins',
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CustomButton2 extends StatelessWidget {
+  const CustomButton2({
+    super.key,
+    required this.title,
+    required this.onPressed, required this.hei,
+  });
+
+  final String title;
+  final VoidCallback onPressed;
+
+  final double hei;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: hei,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          elevation: 0, // مفيش ظل
+          backgroundColor: AppColors.lightPrimary600, // الأخضر
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18), // Rounded قوي
+          ),
+        ),
+        child: Text(
+          title,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            fontFamily: 'Poppins',
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+class EnabledButton extends StatelessWidget {
+  const EnabledButton({
+    super.key,
+    required this.onPressed,
+    required this.text,
+    required this.hei,
+  });
+
+  final VoidCallback? onPressed;
+  final String text;
+  final double hei;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: hei,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ButtonStyle(
+          elevation: const WidgetStatePropertyAll(0),
+          backgroundColor: WidgetStateProperty.resolveWith<Color>(
+            (states) {
+              if (states.contains(WidgetState.disabled)) {
+                return AppColors.darkGrey400;
+              }
+              return AppColors.lightPrimary600;
+            },
+          ),
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
+            ),
+          ),
+        ),
+        child: Text(
+          text,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            fontFamily: 'Poppins',
           ),
         ),
       ),
