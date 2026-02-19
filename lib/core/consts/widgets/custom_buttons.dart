@@ -21,8 +21,7 @@ class CustomButton extends StatelessWidget {
 
     return SizedBox(
       width: double.infinity,
-      height: 55,
-      child: Container(
+      height: 60,    child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),
           gradient: isDisabled ? null : gradient,

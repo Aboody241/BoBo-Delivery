@@ -4,6 +4,7 @@ import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:bobo/core/consts/widgets/custom_appbar.dart';
 import 'package:bobo/core/consts/widgets/custom_forms.dart';
 import 'package:bobo/core/consts/widgets/titled_text.dart';
+import 'package:bobo/features/auth/forgetpassword/pages/verfieOPTpage.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -82,7 +83,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                             onPressed: () {
                               Navigator.pushNamed(
                                 context,
-                                AppRoutes.forgetpassword,
+                                AppRoutes.verfiyOTPScreen,
                               );
                             },
                             child: Text(

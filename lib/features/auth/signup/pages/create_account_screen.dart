@@ -17,34 +17,33 @@ class CreateAccountScreen extends StatefulWidget {
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwrodController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   bool isvalid = false;
+  bool isagreed = false;
 
   void validator() {
     setState(() {
       isvalid =
-          passwrodController.text.isNotEmpty &&
           emailController.text.isNotEmpty &&
-          passwrodController.text.length > 5;
+          passwordController.text.length > 5 &&
+          isagreed;
     });
   }
 
   @override
   void initState() {
     emailController.addListener(validator);
-    passwrodController.addListener(validator);
+    passwordController.addListener(validator);
     super.initState();
   }
 
   @override
   void dispose() {
     emailController.dispose();
-    passwrodController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
-
-  bool isagreed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         preferredSize: Size.fromHeight(60),
         child: CenterLogoAndBackAppbar(),
       ),
-
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Column(
@@ -68,16 +66,18 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             ),
             Gap(20),
             Passwordfields(
-              controller: passwrodController,
+              controller: passwordController,
               hintText: 'password',
             ),
             Gap(8),
+
             Row(
               children: [
                 IconButton(
                   onPressed: () {
                     setState(() {
                       isagreed = !isagreed;
+                      validator(); // تحديث validator فورًا عند تغيير checkbox
                     });
                   },
                   icon: isagreed
@@ -90,7 +90,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           color: AppColors.darkGradientLight,
                         ),
                 ),
-
                 Text(
                   'I agree to terms & conditions',
                   style: AppTextStyle.poppins16.copyWith(
@@ -99,9 +98,18 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 ),
               ],
             ),
+
             Spacer(),
+
             EnabledButton(
-              onPressed: isvalid ? () {} : null,
+              onPressed: isvalid
+                  ? () {
+                      Navigator.pushNamed(
+                        context,
+                        AppRoutes.verfiyOTPScreenNewAccount,
+                      );
+                    }
+                  : null,
               text: 'Create Account',
               hei: 60,
             ),
@@ -109,11 +117,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Don’t have an account?'),
+                const Text('Already have an account?'),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   child: const Text(
-                    'Sign up',
+                    'Sign in',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),

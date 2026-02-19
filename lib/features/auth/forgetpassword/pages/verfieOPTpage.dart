@@ -8,14 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:gap/gap.dart';
 
-class ForgetPassowrdScreen extends StatefulWidget {
-  const ForgetPassowrdScreen({super.key});
+class VerfiyOTPScreen extends StatefulWidget {
+  const VerfiyOTPScreen({super.key});
 
   @override
-  State<ForgetPassowrdScreen> createState() => _ForgetPassowrdScreenState();
+  State<VerfiyOTPScreen> createState() => _VerfiyOTPScreenState();
 }
 
-class _ForgetPassowrdScreenState extends State<ForgetPassowrdScreen> {
+class _VerfiyOTPScreenState extends State<VerfiyOTPScreen> {
   void _showSuccesDialog() {
     showDialog(
       context: context,
@@ -60,6 +60,9 @@ class _ForgetPassowrdScreenState extends State<ForgetPassowrdScreen> {
     });
   }
 
+  String currentOtp = "";
+  bool isOtpComplete = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +75,7 @@ class _ForgetPassowrdScreenState extends State<ForgetPassowrdScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const TitledText(title: 'Forgot your\n password'),
+            const TitledText(title: 'Verfiy OPT Code'),
             const Gap(12),
             Text(
               'Enter the verification code sent to your email sample@example.com',
@@ -88,7 +91,12 @@ class _ForgetPassowrdScreenState extends State<ForgetPassowrdScreen> {
               borderColor: AppColors.black,
               focusedBorderColor: AppColors.darkGradientLight,
               showFieldAsBox: true,
-              onCodeChanged: (String code) {},
+              onCodeChanged: (String code) {
+                setState(() {
+                  currentOtp = code;
+                  isOtpComplete = code.length == 4; // لو اتملأت الأربع خانات
+                });
+              },
               onSubmit: (String verificationCode) {
                 _showSuccesDialog();
               },
@@ -113,12 +121,10 @@ class _ForgetPassowrdScreenState extends State<ForgetPassowrdScreen> {
 
             const Spacer(),
 
-            CustomButton(
-              onPressed: _showSuccesDialog,
-              text: 'Confirm',
-              gradient: LinearGradient(
-                colors: [AppColors.lightPrimary600, AppColors.darkPrimary500],
-              ),
+            EnabledButton(
+              onPressed: isOtpComplete ? _showSuccesDialog : null,
+              text: 'Verfiy',
+              hei: 60,
             ),
 
             const Gap(50),
