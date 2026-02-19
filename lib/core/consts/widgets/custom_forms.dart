@@ -10,6 +10,7 @@ class BasicTextField extends StatelessWidget {
     this.isvisable,
     this.onchange,
     this.controller,
+    this.keyboardtype,
   });
   final String hintText;
 
@@ -18,10 +19,12 @@ class BasicTextField extends StatelessWidget {
   final bool? isvisable;
   final Function(String)? onchange;
   final TextEditingController? controller;
+  final TextInputType? keyboardtype;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      keyboardType: keyboardtype,
       controller: controller,
       onChanged: onchange,
       obscureText: isvisable ?? false,
