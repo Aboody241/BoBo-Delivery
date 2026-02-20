@@ -1,5 +1,6 @@
 import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
+import 'package:bobo/core/consts/widgets/button_style.dart';
 import 'package:bobo/core/consts/widgets/custom_appbar.dart';
 import 'package:bobo/core/consts/widgets/custom_buttons.dart';
 import 'package:bobo/core/consts/widgets/titled_text.dart';
@@ -123,8 +124,8 @@ class _VerfiyOTPScreenState extends State<VerfiyOTPScreen> {
 
             EnabledButton(
               onPressed: isOtpComplete ? _showSuccesDialog : null,
-              text: 'Verfiy',
-              hei: 60,
+              hei: 55,
+              child: Text('verfiy' , style: ButtonTextStyle.button,),
             ),
 
             const Gap(50),

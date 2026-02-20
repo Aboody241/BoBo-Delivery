@@ -1,10 +1,13 @@
 import 'package:bobo/core/consts/routes/routes.dart';
 import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
+import 'package:bobo/core/consts/widgets/button_style.dart';
 import 'package:bobo/core/consts/widgets/custom_appbar.dart';
 import 'package:bobo/core/consts/widgets/custom_buttons.dart';
 import 'package:bobo/core/consts/widgets/custom_forms.dart';
 import 'package:bobo/core/consts/widgets/titled_text.dart';
+import 'package:bobo/features/auth/logic/auth_resvice.dart';
+import 'package:bobo/features/auth/signup/widgets/have_account_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -43,6 +46,36 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  final AuthService auth = AuthService();
+
+  bool isloading = false;
+
+  Future<void> regstire() async {
+    if (mounted) {
+      setState(() {
+        isloading = true;
+      });
+    }
+
+    try {
+      await auth.registerUser(
+        emailController.text.trim(),
+        passwordController.text.trim(),
+      );
+      Navigator.pushReplacementNamed(context, AppRoutes.createProfileScreen);
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
+    }
+
+    if (mounted) {
+      setState(() {
+        isloading = false;
+      });
+    }
   }
 
   @override
@@ -102,33 +135,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             Spacer(),
 
             EnabledButton(
-              onPressed: isvalid
-                  ? () {
-                      Navigator.pushNamed(
-                        context,
-                        AppRoutes.verfiyOTPScreenNewAccount,
-                      );
-                    }
-                  : null,
-              text: 'Create Account',
-              hei: 60,
+              onPressed: (isvalid && !isloading) ? regstire : null,
+              hei: 55,
+              child: isloading
+                  ? CircularProgressIndicator(color: Colors.white)
+                  : Text('Register', style: ButtonTextStyle.button),
             ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Already have an account?'),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text(
-                    'Sign in',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
+            HaveAccountWidget(),
 
             Gap(20),
           ],

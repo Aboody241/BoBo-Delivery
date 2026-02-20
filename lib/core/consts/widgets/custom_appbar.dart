@@ -19,5 +19,35 @@ class CenterLogoAndBackAppbar extends StatelessWidget {
     );
   }
 }
+class CenterLogoAppbar extends StatelessWidget {
+  const CenterLogoAppbar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      title: MainLogo(height: 60, wedth: 60),
+      centerTitle: true,
+    
+    );
+  }
+}
+class CenterandLeadingLogoAppbar extends StatelessWidget {
+  const CenterandLeadingLogoAppbar({super.key, required this.leading});
+
+
+  final Widget leading;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      title: MainLogo(height: 60, wedth: 60),
+      centerTitle: true,
+      leading: leading,
+    
+    );
+  }
+}
 
 // MainLogo(height: 40, wedth: 40),

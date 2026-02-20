@@ -51,17 +51,15 @@ class AppRoutes {
       case createAccount:
         return MaterialPageRoute(builder: (_) => const CreateAccountScreen());
       case verfiyOTPScreenNewAccount:
-        return MaterialPageRoute(builder: (_) => const VerfiyOTPNewAccountScreen(),
+        return MaterialPageRoute(
+          builder: (_) => const VerfiyOTPNewAccountScreen(),
         );
       case createProfileScreen:
         return MaterialPageRoute(builder: (_) => const CreateProfileScreen());
       case homePage:
         return MaterialPageRoute(builder: (_) => const HomePageScreen());
 
-
-
-
-//==============================================================================
+      //==============================================================================
       default:
         return MaterialPageRoute(builder: (_) => NotFoundScreen());
     }

@@ -1,4 +1,5 @@
 import 'package:bobo/core/consts/routes/routes.dart';
+import 'package:bobo/core/consts/widgets/button_style.dart';
 import 'package:bobo/core/consts/widgets/custom_appbar.dart';
 import 'package:bobo/core/consts/widgets/custom_buttons.dart';
 import 'package:bobo/core/consts/widgets/custom_forms.dart';
@@ -49,7 +50,12 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(60),
-        child: CenterLogoAndBackAppbar(),
+        child: CenterandLeadingLogoAppbar(
+          leading: TextButton(
+            onPressed: () {},
+            child: Text('Log Out', style: TextStyle(color: Colors.red)),
+          ),
+        ),
       ),
 
       body: SingleChildScrollView(
@@ -85,8 +91,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                         Navigator.pushNamed(context, AppRoutes.homePage);
                       }
                     : null,
-                text: 'Continue',
-                hei: 60,
+                hei: 55,
+                child: Text('Continue', style: ButtonTextStyle.button),
               ),
             ],
           ),

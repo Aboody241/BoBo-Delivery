@@ -99,12 +99,12 @@ class EnabledButton extends StatelessWidget {
   const EnabledButton({
     super.key,
     required this.onPressed,
-    required this.text,
+    required this.child,
     required this.hei,
   });
 
   final VoidCallback? onPressed;
-  final String text;
+  final Widget child;
   final double hei;
 
   @override
@@ -130,15 +130,7 @@ class EnabledButton extends StatelessWidget {
             ),
           ),
         ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            fontFamily: 'Poppins',
-          ),
-        ),
+        child: child
       ),
     );
   }

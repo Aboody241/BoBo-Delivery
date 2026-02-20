@@ -10,7 +10,7 @@ class BasicTextField extends StatelessWidget {
     this.isvisable,
     this.onchange,
     this.controller,
-    this.keyboardtype,
+    this.keyboardtype, this.prefexIcon, this.padding,
   });
   final String hintText;
 
@@ -21,14 +21,19 @@ class BasicTextField extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputType? keyboardtype;
 
+  final Widget? prefexIcon;
+  final EdgeInsetsGeometry? padding;
+
   @override
   Widget build(BuildContext context) {
     return TextField(
+      
       keyboardType: keyboardtype,
       controller: controller,
       onChanged: onchange,
       obscureText: isvisable ?? false,
       decoration: InputDecoration(
+        contentPadding: padding,
         hintText: hintText,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(13),
@@ -48,6 +53,7 @@ class BasicTextField extends StatelessWidget {
           color: AppColors.darkGrey300,
         ),
         suffixIcon: suffix,
+        prefix: prefexIcon
       ),
     );
   }
@@ -99,6 +105,41 @@ class _PasswordfieldsState extends State<Passwordfields> {
           icon: isvisable
               ? Icon(Icons.visibility_off_outlined)
               : Icon(Icons.remove_red_eye_outlined),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+class CustomSearchBar extends StatelessWidget {
+  const CustomSearchBar({
+    super.key,
+    this.hintText = 'search...',
+    this.onChanged,
+    this.controller,
+  });
+
+  final String hintText;
+  final Function(String)? onChanged;
+  final TextEditingController? controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      decoration: BoxDecoration(
+        color: Colors.grey[200], // خلفية فاتحة مثل الصورة
+        borderRadius: BorderRadius.circular(15), // أركان دائرية خفيفة
+      ),
+      child: TextField(
+        controller: controller,
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          icon: const Icon(Icons.search_rounded, color: Colors.grey),
+          hintText: hintText,
+          border: InputBorder.none, // نشيل الخطوط الافتراضية
         ),
       ),
     );

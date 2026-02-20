@@ -42,7 +42,9 @@ class OnBoardingAuth extends StatelessWidget {
             const SizedBox(height: 40),
 
             CustomButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.homePage);
+              },
               text: "Continue as Guest",
               gradient: LinearGradient(
                 colors: [AppColors.lightPrimary600, AppColors.darkPrimary500],
@@ -63,11 +65,7 @@ class OnBoardingAuth extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AuthButtons(
-                  icon: icons[0],
-                  onTap: () {
-                  },
-                ),
+                AuthButtons(icon: icons[0], onTap: () {}),
                 AuthButtons(icon: icons[1], onTap: () {}),
                 AuthButtons(
                   icon: icons[2],

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "930797101948",
+    "project_id": "bobo-b7385",
+    "storage_bucket": "bobo-b7385.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930797101948:android:8e1c7cdf8ed6e919c67af9",
+        "android_client_info": {
+          "package_name": "com.example.bobo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBP2hJN9Bz0bUpVv5dgrydys22SbbGR7Gc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

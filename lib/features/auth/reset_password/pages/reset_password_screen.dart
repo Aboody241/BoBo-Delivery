@@ -1,5 +1,7 @@
+import 'package:bobo/core/consts/routes/routes.dart';
 import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
+import 'package:bobo/core/consts/widgets/button_style.dart';
 import 'package:bobo/core/consts/widgets/custom_appbar.dart';
 import 'package:bobo/core/consts/widgets/custom_buttons.dart';
 import 'package:bobo/core/consts/widgets/custom_forms.dart';
@@ -68,18 +70,23 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             Gap(30),
             Passwordfields(
               controller: passwordController,
-              hintText: 'Password'),
+              hintText: 'Password',
+            ),
             Gap(15),
             Passwordfields(
               controller: confirmPasswordController,
-              hintText: 'Confirm Password'),
-              Spacer(),
-            EnabledButton(
-              onPressed: isvalidate ? () {} : null,
-              text: 'Confirm',
-              hei: 55,
+              hintText: 'Confirm Password',
             ),
-            Gap(50)
+            Spacer(),
+            EnabledButton(
+              onPressed: isvalidate
+                  ? () {
+                      Navigator.pushNamed(context, AppRoutes.homePage);
+                    }
+                  : null,
+              hei: 55, child: Text('Confirm' , style: ButtonTextStyle.button,),
+            ),
+            Gap(50),
           ],
         ),
       ),

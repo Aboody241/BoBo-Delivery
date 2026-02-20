@@ -122,8 +122,8 @@ class _VerfiyOTPNewAccountScreenState extends State<VerfiyOTPNewAccountScreen> {
 
             EnabledButton(
               onPressed: isOtpComplete ? _showSuccesDialog : null,
-              text: 'Verfiy',
-              hei: 60,
+              hei: 55,
+              child: Text('Verfiy'),
             ),
 
             const Gap(50),

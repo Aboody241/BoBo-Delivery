@@ -4,7 +4,8 @@ import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:bobo/core/consts/widgets/custom_appbar.dart';
 import 'package:bobo/core/consts/widgets/custom_forms.dart';
 import 'package:bobo/core/consts/widgets/titled_text.dart';
-import 'package:bobo/features/auth/forgetpassword/pages/verfieOPTpage.dart';
+import 'package:bobo/features/auth/logic/auth_resvice.dart';
+import 'package:bobo/features/auth/login/widgets/dont_have_account.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -23,7 +24,10 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
 
   void validator() {
     setState(() {
-      isButtonEnabled = emailcon.text.isNotEmpty && passlcon.text.isNotEmpty;
+      isButtonEnabled =
+          emailcon.text.isNotEmpty &&
+          passlcon.text.isNotEmpty &&
+          emailcon.text.contains('@');
     });
   }
 
@@ -39,6 +43,32 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
     emailcon.dispose();
     passlcon.dispose();
     super.dispose();
+  }
+
+  final AuthService auth = AuthService();
+  bool isloading = false;
+
+  Future<void> login() async {
+    if (mounted) {
+      setState(() {
+        isloading = true;
+      });
+    }
+
+    try {
+      await auth.loginUser(emailcon.text.trim(), passlcon.text.trim());
+      Navigator.pushReplacementNamed(context, AppRoutes.homePage);
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
+    }
+
+    if (mounted) {
+      setState(() {
+        isloading = false;
+      });
+    }
   }
 
   @override
@@ -60,6 +90,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const TitledText(title: 'Log in to your \naccount'),
+
                       const Gap(20),
 
                       // Email field (normal text)
@@ -100,35 +131,28 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
 
                       // Login button
                       _LoginButton(
-                        onPressed: isButtonEnabled
+                        onPressed: (isButtonEnabled && !isloading)
                             ? () {
-                                // Add your login logic here
+                                login();
                               }
                             : null,
-                        text: 'Log in',
+                        child: isloading
+                            ? CircularProgressIndicator()
+                            : Text(
+                                'Log in',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
                       ),
 
                       const Gap(5),
 
                       // Sign up
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text('Don’t have an account?'),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                context,
-                                AppRoutes.createAccount,
-                              );
-                            },
-                            child: const Text(
-                              'Sign up',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
+                      DontHaveAccountWidgets(),
                       const Gap(20),
                     ],
                   ),
@@ -143,10 +167,10 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
 }
 
 class _LoginButton extends StatelessWidget {
-  const _LoginButton({super.key, required this.onPressed, required this.text});
+  const _LoginButton({super.key, required this.onPressed, required this.child});
 
   final VoidCallback? onPressed;
-  final String text;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -166,15 +190,7 @@ class _LoginButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(18),
           ),
         ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            fontFamily: 'Poppins',
-          ),
-        ),
+        child: child,
       ),
     );
   }
