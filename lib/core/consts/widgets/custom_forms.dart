@@ -130,8 +130,12 @@ class CustomSearchBar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       decoration: BoxDecoration(
-        color: Colors.grey[200], // خلفية فاتحة مثل الصورة
-        borderRadius: BorderRadius.circular(15), // أركان دائرية خفيفة
+        color: Colors.grey[000], // خلفية فاتحة مثل الصورة
+        borderRadius: BorderRadius.circular(15), 
+        border:Border.all(
+          color: Color.fromARGB(255, 215, 217, 213),
+          width: 1.5
+        )// أركان دائرية خفيفة
       ),
       child: TextField(
         controller: controller,

@@ -1,5 +1,4 @@
 import 'package:bobo/core/consts/routes/routes.dart';
-import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class DontHaveAccountWidgets extends StatelessWidget {

@@ -3,7 +3,6 @@ import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:bobo/core/consts/widgets/custom_appbar.dart';
 import 'package:bobo/core/consts/widgets/custom_buttons.dart';
 import 'package:bobo/core/consts/widgets/titled_text.dart';
-import 'package:bobo/features/auth/reset_password/pages/reset_password_screen.dart';
 import 'package:bobo/features/profile/pages/create_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';

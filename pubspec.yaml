@@ -43,7 +43,9 @@ dependencies:
   gap: ^3.0.1
   google_fonts: ^6.3.2
   icons_plus: ^5.0.0
+  persistent_bottom_nav_bar: ^6.2.1
   phone_form_field: ^10.0.17
+  uid: ^0.1.1
 
 dev_dependencies:
   flutter_lints: ^6.0.0

@@ -1,6 +1,4 @@
 import 'dart:ui';
-
-import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/widgets/custom_forms.dart';
 import 'package:bobo/features/home/widgets/home_appbar.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +23,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
     'Margherita Pizza',
     'Chocolate Donut',
     'Vegan Salad',
-    'Fries'
+    'Fries',
   ];
 
   @override
@@ -53,7 +51,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
               // Horizontal categories list
               SizedBox(
-                height: 50, // fixed height for cards
+                height: 0, // fixed height for cards
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: categoryNames.length,

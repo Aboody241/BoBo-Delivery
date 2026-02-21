@@ -5,6 +5,7 @@ import 'package:bobo/features/auth/login/pages/login_page_screen.dart';
 import 'package:bobo/features/auth/reset_password/pages/reset_password_screen.dart';
 import 'package:bobo/features/auth/signup/pages/create_account_screen.dart';
 import 'package:bobo/features/home/pages/home_page_screen.dart';
+import 'package:bobo/features/home/pages/main_nav_screen.dart';
 import 'package:bobo/features/on_board/pages/on_board_page.dart';
 import 'package:bobo/features/on_board/pages/on_boarding_auth.dart';
 import 'package:bobo/features/profile/pages/create_profile_screen.dart';
@@ -24,11 +25,16 @@ class AppRoutes {
   static const String createAccount = '/createAccoun';
   static const String createProfileScreen = '/createProfileScreen';
   static const String homePage = '/homepage';
+  static const String mainNav = '/main';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case splash:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
+
+      case mainNav:
+      case homePage:
+        return MaterialPageRoute(builder: (_) => const MainNavScreen());
 
       case onBoarding:
         return MaterialPageRoute(builder: (_) => const OnBoardPage());
@@ -56,6 +62,7 @@ class AppRoutes {
         );
       case createProfileScreen:
         return MaterialPageRoute(builder: (_) => const CreateProfileScreen());
+      // ignore: unreachable_switch_case
       case homePage:
         return MaterialPageRoute(builder: (_) => const HomePageScreen());
 

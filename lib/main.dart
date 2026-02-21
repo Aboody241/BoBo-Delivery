@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:bobo/core/consts/routes/routes.dart';
+import 'package:bobo/features/auth/login/pages/login_page_screen.dart';
+import 'package:bobo/features/home/pages/main_nav_screen.dart';
 import 'package:bobo/features/splash/splash_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -73,7 +76,20 @@ class MyApp extends StatelessWidget {
             ),
           ),
           themeMode: ThemeMode.system,
-          home: child,
+          home: StreamBuilder(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Scaffold(body: CircularProgressIndicator());
+              }
+
+              if (snapshot.hasData) {
+                return const MainNavScreen();
+              }
+
+              return LoginPageScreen();
+            },
+          ),
           builder: (context, child) {
             // Add error boundary
             ErrorWidget.builder = (FlutterErrorDetails errorDetails) {

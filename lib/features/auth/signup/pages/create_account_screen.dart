@@ -6,7 +6,7 @@ import 'package:bobo/core/consts/widgets/custom_appbar.dart';
 import 'package:bobo/core/consts/widgets/custom_buttons.dart';
 import 'package:bobo/core/consts/widgets/custom_forms.dart';
 import 'package:bobo/core/consts/widgets/titled_text.dart';
-import 'package:bobo/features/auth/logic/auth_resvice.dart';
+import 'package:bobo/services/firebase/auth_resvice.dart';
 import 'package:bobo/features/auth/signup/widgets/have_account_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -64,6 +64,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         emailController.text.trim(),
         passwordController.text.trim(),
       );
+
       Navigator.pushReplacementNamed(context, AppRoutes.createProfileScreen);
     } catch (e) {
       ScaffoldMessenger.of(
