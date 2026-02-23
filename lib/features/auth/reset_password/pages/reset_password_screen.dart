@@ -81,7 +81,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             EnabledButton(
               onPressed: isvalidate
                   ? () {
-                      Navigator.pushNamed(context, AppRoutes.homePage);
+                      Navigator.pushNamed(context, AppRoutes.mainNav);
                     }
                   : null,
               hei: 55, child: Text('Confirm' , style: ButtonTextStyle.button,),

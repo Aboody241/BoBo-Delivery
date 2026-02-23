@@ -64,9 +64,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         emailController.text.trim(),
         passwordController.text.trim(),
       );
-
+      if (!mounted) return;
       Navigator.pushReplacementNamed(context, AppRoutes.createProfileScreen);
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(e.toString())));

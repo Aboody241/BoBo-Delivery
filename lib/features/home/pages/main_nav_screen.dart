@@ -72,7 +72,9 @@ class _MainNavScreenState extends State<MainNavScreen> {
 
   @override
   Widget build(BuildContext context) {
+    
     return PersistentTabView(
+      navBarHeight: 35,
       context,
       controller: _controller,
       screens: _buildScreens(),

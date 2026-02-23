@@ -43,7 +43,7 @@ class OnBoardingAuth extends StatelessWidget {
 
             CustomButton(
               onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.homePage);
+                Navigator.pushNamed(context, AppRoutes.mainNav);
               },
               text: "Continue as Guest",
               gradient: LinearGradient(

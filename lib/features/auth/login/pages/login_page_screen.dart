@@ -57,8 +57,10 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
 
     try {
       await auth.loginUser(emailcon.text.trim(), passlcon.text.trim());
-      Navigator.pushReplacementNamed(context, AppRoutes.homePage);
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, AppRoutes.mainNav);
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(e.toString())));

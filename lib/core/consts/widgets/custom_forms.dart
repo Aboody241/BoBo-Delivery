@@ -128,12 +128,12 @@ class CustomSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2),
       decoration: BoxDecoration(
         color: Colors.grey[000], // خلفية فاتحة مثل الصورة
         borderRadius: BorderRadius.circular(15), 
         border:Border.all(
-          color: Color.fromARGB(255, 215, 217, 213),
+          color: Color.fromARGB(255, 235, 236, 234),
           width: 1.5
         )// أركان دائرية خفيفة
       ),
@@ -149,3 +149,4 @@ class CustomSearchBar extends StatelessWidget {
     );
   }
 }
+

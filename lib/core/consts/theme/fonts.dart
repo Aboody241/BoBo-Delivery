@@ -150,5 +150,13 @@ class AppTextStyle {
     fontSize: 16,
     fontWeight: FontWeight.bold,
   );
+  static TextStyle poppins18Bold = GoogleFonts.poppins(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+  );
+  static TextStyle poppins20Bold = GoogleFonts.poppins(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+  );
   static TextStyle poppins30 = GoogleFonts.poppins(fontSize: 30);
 }

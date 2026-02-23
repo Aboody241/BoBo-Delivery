@@ -88,7 +88,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
               EnabledButton(
                 onPressed: isvalid
                     ? () {
-                        Navigator.pushNamed(context, AppRoutes.homePage);
+                        Navigator.pushNamed(context, AppRoutes.mainNav);
                       }
                     : null,
                 hei: 55,

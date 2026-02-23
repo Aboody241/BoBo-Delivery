@@ -1,20 +1,39 @@
 import 'package:bobo/core/consts/routes/routes.dart';
 import 'package:flutter/material.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _navigateToOnBoarding();
+  }
+
+  void _navigateToOnBoarding() {
     Future.delayed(const Duration(seconds: 3), () {
-      if (context.mounted) {
+      if (mounted) {
         Navigator.pushReplacementNamed(context, AppRoutes.onBoarding);
       }
     });
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
+          Image.asset(
+            'assets/consts/splash_background.png',
+            fit: BoxFit.cover,
+            height: double.infinity,
+            width: double.infinity,
+          ),
           Positioned(
             left: 100,
             right: 100,
@@ -24,12 +43,6 @@ class SplashScreen extends StatelessWidget {
               width: 120,
               height: 120,
             ),
-          ),
-          Image.asset(
-            'assets/consts/splash_background.png',
-            fit: BoxFit.cover,
-            height: double.infinity,
-            width: double.infinity,
           ),
         ],
       ),

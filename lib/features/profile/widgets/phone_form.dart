@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 
 class PhoneForm extends StatelessWidget {
-  PhoneForm({super.key, required this.controller});
+  const PhoneForm({super.key, required this.controller});
 
   final PhoneController? controller;
 

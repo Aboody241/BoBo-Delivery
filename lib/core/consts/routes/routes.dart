@@ -4,7 +4,7 @@ import 'package:bobo/features/auth/forgetpassword/pages/verfieOPTpage.dart';
 import 'package:bobo/features/auth/login/pages/login_page_screen.dart';
 import 'package:bobo/features/auth/reset_password/pages/reset_password_screen.dart';
 import 'package:bobo/features/auth/signup/pages/create_account_screen.dart';
-import 'package:bobo/features/home/pages/home_page_screen.dart';
+
 import 'package:bobo/features/home/pages/main_nav_screen.dart';
 import 'package:bobo/features/on_board/pages/on_board_page.dart';
 import 'package:bobo/features/on_board/pages/on_boarding_auth.dart';
@@ -22,7 +22,7 @@ class AppRoutes {
   static const String verfiyOTPScreenNewAccount = '/verfiyOTPNewAccount';
   static const String notfoundpage = '/notfoundpage';
   static const String resetpassword = '/resetpassword';
-  static const String createAccount = '/createAccoun';
+  static const String createAccount = '/createAccount';
   static const String createProfileScreen = '/createProfileScreen';
   static const String homePage = '/homepage';
   static const String mainNav = '/main';
@@ -62,13 +62,10 @@ class AppRoutes {
         );
       case createProfileScreen:
         return MaterialPageRoute(builder: (_) => const CreateProfileScreen());
-      // ignore: unreachable_switch_case
-      case homePage:
-        return MaterialPageRoute(builder: (_) => const HomePageScreen());
 
       //==============================================================================
       default:
-        return MaterialPageRoute(builder: (_) => NotFoundScreen());
+        return MaterialPageRoute(builder: (_) => const NotFoundScreen());
     }
   }
 }

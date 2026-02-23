@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:bobo/core/consts/routes/routes.dart';
-import 'package:bobo/features/auth/login/pages/login_page_screen.dart';
+
 import 'package:bobo/features/home/pages/main_nav_screen.dart';
 import 'package:bobo/features/splash/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -85,9 +85,9 @@ class MyApp extends StatelessWidget {
 
               if (snapshot.hasData) {
                 return const MainNavScreen();
-              }
+            }
 
-              return LoginPageScreen();
+              return const SplashScreen();
             },
           ),
           builder: (context, child) {
