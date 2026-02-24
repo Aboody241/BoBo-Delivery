@@ -85,7 +85,7 @@ class MyApp extends StatelessWidget {
 
               if (snapshot.hasData) {
                 return const MainNavScreen();
-            }
+              }
 
               return const SplashScreen();
             },
