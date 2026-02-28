@@ -1,4 +1,4 @@
-
+import 'package:bobo/core/consts/routes/routes.dart';
 import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:bobo/core/consts/widgets/custom_forms.dart';
@@ -90,105 +90,115 @@ class _HomePageScreenState extends State<HomePageScreen> {
                   context,
                   index,
                 ) {
-                  return Card(
-                    shadowColor: AppColors.lightGrey0,
-                    color: AppColors.lightGrey0,
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Stack(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 8,
-                              ),
-                              child: Expanded(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(15),
-                                  ),
-                                  child: Image.asset(
-                                    'assets/products/burger_test.png',
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                  ),
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context, rootNavigator: true).pushNamed(AppRoutes.productDetailScreen);
+                    },
+                    child: Card(
+                      shadowColor: AppColors.lightGrey0,
+                      color: AppColors.lightGrey0,
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Stack(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 8,
                                 ),
-                              ),
-                            ),
-
-                            Positioned(
-                              bottom: 10,
-                              left: 10,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 4,
-                                  vertical: 1,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: AppColors.white,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.star_rounded,
-                                      color: AppColors.lightYellow,
+                                child: Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(15),
                                     ),
+                                    child: Image.asset(
+                                      'assets/products/burger_test.png',
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              Positioned(
+                                bottom: 10,
+                                left: 10,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 4,
+                                    vertical: 1,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.white,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.star_rounded,
+                                        color: AppColors.lightYellow,
+                                      ),
+                                      Text(
+                                        '4.7',
+                                        style: AppTextStyle.poppins14.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Classic Burger',
+                                  style: AppTextStyle.poppins16.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                const Gap(10),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
                                     Text(
-                                      '4.7',
-                                      style: AppTextStyle.poppins14.copyWith(
-                                        fontWeight: FontWeight.w600,
+                                      '\$12.50',
+                                      style: AppTextStyle.poppins20Bold,
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(3),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Color.fromARGB(
+                                          255,
+                                          233,
+                                          240,
+                                          228,
+                                        ),
+                                      ),
+                                      child: Icon(
+                                        Icons.add,
+                                        size: 28,
+                                        color: AppColors.darkGradientDark,
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Classic Burger',
-                                style: AppTextStyle.poppins16.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                                const Gap(10),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '\$12.50',
-                                    style: AppTextStyle.poppins20Bold,
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.all(3),
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Color.fromARGB(255, 233, 240, 228),
-                                    ),
-                                    child: Icon(
-                                      Icons.add,
-                                      size: 28,
-                                      color: AppColors.darkGradientDark,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   );
                 }),
@@ -196,7 +206,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                   crossAxisCount: 2,
                   mainAxisSpacing: 12,
                   crossAxisSpacing: 10,
-                  mainAxisExtent: 250,
+                  childAspectRatio: 0.7,
                 ),
               ),
             ],
@@ -206,7 +216,6 @@ class _HomePageScreenState extends State<HomePageScreen> {
     );
   }
 }
-
 
 class _SearchBarDelegate extends SliverPersistentHeaderDelegate {
   final TextEditingController controller;

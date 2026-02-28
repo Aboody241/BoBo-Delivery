@@ -125,6 +125,8 @@ class CustomSearchBar extends StatelessWidget {
   final Function(String)? onChanged;
   final TextEditingController? controller;
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -141,6 +143,9 @@ class CustomSearchBar extends StatelessWidget {
         controller: controller,
         onChanged: onChanged,
         decoration: InputDecoration(
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.darkGradientDark)
+          ),
           icon: const Icon(Icons.search_rounded, color: Colors.grey),
           hintText: hintText,
           border: InputBorder.none, // نشيل الخطوط الافتراضية

@@ -14,11 +14,12 @@ class CenterLogoAndBackAppbar extends StatelessWidget {
         onPressed: () {
           Navigator.pop(context);
         },
-        icon: Icon(Icons.arrow_back_ios_new_rounded, size: 28,),
+        icon: Icon(Icons.arrow_back_ios_new_rounded, size: 28),
       ),
     );
   }
 }
+//////////////////////////////////////////////////
 class CenterLogoAppbar extends StatelessWidget {
   const CenterLogoAppbar({super.key});
 
@@ -28,13 +29,14 @@ class CenterLogoAppbar extends StatelessWidget {
       automaticallyImplyLeading: false,
       title: MainLogo(height: 60, wedth: 60),
       centerTitle: true,
-    
     );
   }
 }
+
+
+/////////////////////////////////////////////////
 class CenterandLeadingLogoAppbar extends StatelessWidget {
   const CenterandLeadingLogoAppbar({super.key, required this.leading});
-
 
   final Widget leading;
 
@@ -45,7 +47,6 @@ class CenterandLeadingLogoAppbar extends StatelessWidget {
       title: MainLogo(height: 60, wedth: 60),
       centerTitle: true,
       leading: leading,
-    
     );
   }
 }

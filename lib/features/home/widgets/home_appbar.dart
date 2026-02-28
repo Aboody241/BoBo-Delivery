@@ -10,7 +10,6 @@ class HomeAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final String uid = FirebaseAuth.instance.currentUser!.uid;
     final userRef = FirebaseFirestore.instance.collection('users').doc(uid);
 
@@ -49,15 +48,13 @@ class HomeAppbar extends StatelessWidget {
               InkWell(
                 onTap: () async {
                   await AuthService().logout();
-                  if (!context.mounted) return;
-                  Navigator.pushReplacementNamed(context, AppRoutes.mainNav);
+                  if (!context.mounted) return ;
+                  Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppRoutes.onBoardingAuth);
                 },
                 child: CircleAvatar(
                   maxRadius: 25,
                   backgroundColor: Colors.blueAccent,
-                  child: snapshot.hasData
-                      ? Image.asset('assets/consts/avataar.jpeg')
-                      : Icon(Icons.person, color: Colors.white, size: 28),
+                  child: Icon(Icons.person, color: Colors.white, size: 28),
                 ),
               ),
             ],

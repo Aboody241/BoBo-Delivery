@@ -6,6 +6,7 @@ import 'package:bobo/features/auth/reset_password/pages/reset_password_screen.da
 import 'package:bobo/features/auth/signup/pages/create_account_screen.dart';
 
 import 'package:bobo/features/home/pages/main_nav_screen.dart';
+import 'package:bobo/features/home/pages/product_detail_screen.dart';
 import 'package:bobo/features/on_board/pages/on_board_page.dart';
 import 'package:bobo/features/on_board/pages/on_boarding_auth.dart';
 import 'package:bobo/features/profile/pages/create_profile_screen.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/material.dart';
 
 class AppRoutes {
   static const String splash = '/';
+  static const String mainNav = '/main';
   static const String onBoarding = '/onBoarding';
   static const String onBoardingAuth = '/onBoardingAuth';
   static const String profile = '/profile';
@@ -25,7 +27,8 @@ class AppRoutes {
   static const String createAccount = '/createAccount';
   static const String createProfileScreen = '/createProfileScreen';
   static const String homePage = '/homepage';
-  static const String mainNav = '/main';
+  static const String productDetailScreen = '/productDetailScreen';
+  
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -62,6 +65,8 @@ class AppRoutes {
         );
       case createProfileScreen:
         return MaterialPageRoute(builder: (_) => const CreateProfileScreen());
+      case productDetailScreen:
+        return MaterialPageRoute(builder: (_) => const ProductDetailScreen());
 
       //==============================================================================
       default:

@@ -70,7 +70,7 @@ class OnBoardingAuth extends StatelessWidget {
                 AuthButtons(
                   icon: icons[2],
                   onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.loginscreen);
+                    Navigator.of(context, rootNavigator: true).pushNamed(AppRoutes.loginscreen);
                   },
                 ),
               ],

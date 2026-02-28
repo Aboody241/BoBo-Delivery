@@ -146,6 +146,10 @@ class AppTextStyle {
   static TextStyle poppins20 = GoogleFonts.poppins(fontSize: 20);
   static TextStyle poppins22 = GoogleFonts.poppins(fontSize: 22);
   static TextStyle poppins24 = GoogleFonts.poppins(fontSize: 24);
+  static TextStyle poppins14Bold = GoogleFonts.poppins(
+    fontSize: 14,
+    fontWeight: FontWeight.bold,
+  );
   static TextStyle poppins16Bold = GoogleFonts.poppins(
     fontSize: 16,
     fontWeight: FontWeight.bold,
@@ -156,6 +160,14 @@ class AppTextStyle {
   );
   static TextStyle poppins20Bold = GoogleFonts.poppins(
     fontSize: 20,
+    fontWeight: FontWeight.bold,
+  );
+  static TextStyle poppins22Bold = GoogleFonts.poppins(
+    fontSize: 22,
+    fontWeight: FontWeight.bold,
+  );
+  static TextStyle poppins24Bold = GoogleFonts.poppins(
+    fontSize: 24,
     fontWeight: FontWeight.bold,
   );
   static TextStyle poppins30 = GoogleFonts.poppins(fontSize: 30);
