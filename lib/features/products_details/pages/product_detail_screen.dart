@@ -13,7 +13,10 @@ class ProductDetailScreen extends StatefulWidget {
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
 
-class _ProductDetailScreenState extends State<ProductDetailScreen> {
+class _ProductDetailScreenState extends State<ProductDetailScreen>
+    with TickerProviderStateMixin {
+  late AnimationController animationController;
+
   bool isFavorate = false;
 
   double currentIndex = 0;
@@ -24,6 +27,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final PageController pageController = PageController();
 
   @override
+  void initState() {
+    animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 400),
+      upperBound: 40,
+      lowerBound: 20,
+    );
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -32,28 +46,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         title: Text('Details', style: AppTextStyle.poppins24Bold),
         leading: InkWell(
           onTap: () {
-                          Navigator.pop(context);
-
+            Navigator.pop(context);
           },
-          child: Icon(Icons.arrow_back_ios_new_sharp)),
+          child: Icon(Icons.arrow_back_ios_new_sharp),
+        ),
         actions: [
           IconButton(
-            onPressed: () {
-            },
+            onPressed: () {},
             icon: Icon(Icons.share, color: AppColors.darkGrey100),
           ),
-          IconButton(
-            onPressed: () {
+          GestureDetector(
+            onTap: () {
               setState(() {
                 isFavorate = !isFavorate;
               });
             },
-            icon: Icon(
-              isFavorate ? Icons.favorite_sharp : Icons.favorite_border_rounded,
-              color: AppColors.lightRed,
+            child: Icon(
+              isFavorate ? Icons.favorite_border_rounded : Icons.favorite,
               size: 30,
+              color: isFavorate ? Colors.black : Colors.red,
             ),
           ),
+          Gap(10),
         ],
       ),
 
@@ -63,7 +77,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             child: Container(
               width: 340,
               height: 380,
-
               child: Column(
                 children: [
                   Expanded(
@@ -198,7 +211,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                         child: Row(
                           children: [
-                            InkWell(
+                            GestureDetector(
                               onTap: () {
                                 if (productNum > 0) {
                                   setState(() {
@@ -227,7 +240,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             ),
                             Gap(10),
 
-                            InkWell(
+                            GestureDetector(
                               onTap: () {
                                 setState(() {
                                   productNum++;

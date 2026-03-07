@@ -35,6 +35,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Bobo App',
+
           theme: ThemeData(
             useMaterial3: true,
             scaffoldBackgroundColor: AppColors.lightGrey0,
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
               scrolledUnderElevation: 0,
             ),
           ),
+
           darkTheme: ThemeData(
             useMaterial3: true,
             scaffoldBackgroundColor: AppColors.darkGrey0,
@@ -67,13 +69,16 @@ class MyApp extends StatelessWidget {
               scrolledUnderElevation: 0,
             ),
           ),
+
           themeMode: ThemeMode.system,
 
-          // ✅ Use initialRoute + onGenerateRoute only
-          initialRoute: AppRoutes.splash,
+          // الصفحة الأولى
+          home: const AuthGate(),
+
+          // navigation routes
           onGenerateRoute: AppRoutes.generateRoute,
 
-          // ✅ Error boundary
+          // Error UI
           builder: (context, child) {
             ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
               return Scaffold(
@@ -94,7 +99,32 @@ class MyApp extends StatelessWidget {
           },
         );
       },
-      child: const SplashScreen(),
+    );
+  }
+}
+
+class AuthGate extends StatelessWidget {
+  const AuthGate({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+
+        // أثناء تحميل Firebase
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const SplashScreen();
+        }
+
+        // المستخدم مسجل دخول
+        if (snapshot.hasData) {
+          return const MainNavScreen();
+        }
+
+        // المستخدم غير مسجل
+        return const LoginPageScreen();
+      },
     );
   }
 }

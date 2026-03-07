@@ -6,8 +6,27 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 
-class OnBoardingAuth extends StatelessWidget {
+class OnBoardingAuth extends StatefulWidget {
   const OnBoardingAuth({super.key});
+
+  @override
+  State<OnBoardingAuth> createState() => _OnBoardingAuthState();
+}
+
+class _OnBoardingAuthState extends State<OnBoardingAuth>
+    with TickerProviderStateMixin {
+  late AnimationController animationController;
+
+  @override
+  void initState() {
+    animationController = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+      upperBound: 4,
+      lowerBound: 2,
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +35,6 @@ class OnBoardingAuth extends StatelessWidget {
       FontAwesomeIcons.apple,
       Icons.email,
     ];
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -27,7 +45,22 @@ class OnBoardingAuth extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset("assets/on_board/onb4.png", height: 300),
+            TweenAnimationBuilder(
+              curve: Curves.linear,
+              tween: AlignmentGeometryTween(
+                begin: AlignmentGeometry.xy(5, 5),
+                end: AlignmentGeometry.xy(10, 10),
+              ),
+              duration: Duration(seconds: 1),
+              builder:
+                  (
+                    BuildContext context,
+                    AlignmentGeometry? value,
+                    Widget? child,
+                  ) {
+                    return Image.asset("assets/on_board/onb4.png", height: 300);
+                  },
+            ),
 
             const SizedBox(height: 20),
 
@@ -70,7 +103,10 @@ class OnBoardingAuth extends StatelessWidget {
                 AuthButtons(
                   icon: icons[2],
                   onTap: () {
-                    Navigator.of(context, rootNavigator: true).pushNamed(AppRoutes.loginscreen);
+                    Navigator.of(
+                      context,
+                      rootNavigator: true,
+                    ).pushNamed(AppRoutes.loginscreen);
                   },
                 ),
               ],

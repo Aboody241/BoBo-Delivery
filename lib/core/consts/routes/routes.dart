@@ -6,7 +6,7 @@ import 'package:bobo/features/auth/reset_password/pages/reset_password_screen.da
 import 'package:bobo/features/auth/signup/pages/create_account_screen.dart';
 
 import 'package:bobo/features/home/pages/main_nav_screen.dart';
-import 'package:bobo/features/home/pages/product_detail_screen.dart';
+import 'package:bobo/features/products_details/pages/product_detail_screen.dart';
 import 'package:bobo/features/on_board/pages/on_board_page.dart';
 import 'package:bobo/features/on_board/pages/on_boarding_auth.dart';
 import 'package:bobo/features/profile/pages/create_profile_screen.dart';
