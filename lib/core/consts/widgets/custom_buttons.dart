@@ -135,3 +135,20 @@ class EnabledButton extends StatelessWidget {
     );
   }
 }
+
+
+
+
+class CustomBackButton extends StatelessWidget {
+  const CustomBackButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Icon(Icons.arrow_back_ios_new_sharp),
+        );
+  }
+}

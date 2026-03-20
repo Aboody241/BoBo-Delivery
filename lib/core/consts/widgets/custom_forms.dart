@@ -14,7 +14,7 @@ class BasicTextField extends StatelessWidget {
   });
   final String hintText;
 
-  final IconButton? suffix;
+  final Widget? suffix;
 
   final bool? isvisable;
   final Function(String)? onchange;
@@ -154,4 +154,3 @@ class CustomSearchBar extends StatelessWidget {
     );
   }
 }
-

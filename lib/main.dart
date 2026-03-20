@@ -13,7 +13,9 @@ void main() {
   runZonedGuarded<Future<void>>(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+
       await Firebase.initializeApp();
+
       runApp(const MyApp());
     },
     (error, stackTrace) {
@@ -83,6 +85,7 @@ class MyApp extends StatelessWidget {
             ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
               return Scaffold(
                 appBar: AppBar(title: const Text('حدث خطأ')),
+
                 body: Center(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -111,7 +114,6 @@ class AuthGate extends StatelessWidget {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
-
         // أثناء تحميل Firebase
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const SplashScreen();

@@ -4,12 +4,17 @@ import 'package:bobo/features/auth/forgetpassword/pages/verfieOPTpage.dart';
 import 'package:bobo/features/auth/login/pages/login_page_screen.dart';
 import 'package:bobo/features/auth/reset_password/pages/reset_password_screen.dart';
 import 'package:bobo/features/auth/signup/pages/create_account_screen.dart';
+import 'package:bobo/features/cart/screen/check_address_screen.dart';
+import 'package:bobo/features/cart/screen/oreder_submited.dart';
+import 'package:bobo/features/discover_page/pages/discover_screen.dart';
 
 import 'package:bobo/features/home/pages/main_nav_screen.dart';
+import 'package:bobo/features/my_orders/pages/my_orders_screen.dart';
 import 'package:bobo/features/products_details/pages/product_detail_screen.dart';
 import 'package:bobo/features/on_board/pages/on_board_page.dart';
 import 'package:bobo/features/on_board/pages/on_boarding_auth.dart';
 import 'package:bobo/features/profile/pages/create_profile_screen.dart';
+import 'package:bobo/features/profile/pages/user_profile.dart';
 import 'package:bobo/features/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +33,11 @@ class AppRoutes {
   static const String createProfileScreen = '/createProfileScreen';
   static const String homePage = '/homepage';
   static const String productDetailScreen = '/productDetailScreen';
-  
+  static const String checkAddressScreen = '/checkAddressScreen';
+  static const String orderSubmited = '/orderSubmitedScreen';
+  static const String userProfileScreen = '/userProfileScreen';
+  static const String myOrdersScreen = '/myOrdersScreen';
+  static const String discoverScreen = '/discoverScreen';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -67,6 +76,16 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const CreateProfileScreen());
       case productDetailScreen:
         return MaterialPageRoute(builder: (_) => const ProductDetailScreen());
+      case checkAddressScreen:
+        return MaterialPageRoute(builder: (_) => const CheckAddressScreen());
+      case orderSubmited:
+        return MaterialPageRoute(builder: (_) => const OrederSubmited());
+      case myOrdersScreen:
+        return MaterialPageRoute(builder: (_) => const MyOrdersScreen());
+      case userProfileScreen:
+        return MaterialPageRoute(builder: (_) => const UserProfileScreen());
+      case discoverScreen:
+        return MaterialPageRoute(builder: (_) => const DiscoverScreen());
 
       //==============================================================================
       default:

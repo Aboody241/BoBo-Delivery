@@ -1,9 +1,7 @@
-import 'package:bobo/core/consts/routes/routes.dart';
-import 'package:bobo/core/consts/theme/colors.dart';
-import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:bobo/core/consts/widgets/custom_forms.dart';
 import 'package:bobo/features/home/widgets/category_cards.dart';
 import 'package:bobo/features/home/widgets/home_appbar.dart';
+import 'package:bobo/features/home/widgets/home_products_list.dart';
 import 'package:bobo/features/home/widgets/home_slider_banner.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -17,6 +15,8 @@ class HomePageScreen extends StatefulWidget {
 
 class _HomePageScreenState extends State<HomePageScreen> {
   TextEditingController searchController = TextEditingController();
+  final GlobalKey<HomeProductsListState> _productsListKey =
+      GlobalKey<HomeProductsListState>();
 
   // Example categories
   final List<String> categoryNames = ['Offers', 'Burger', 'Pizza', 'Donut'];
@@ -46,170 +46,54 @@ class _HomePageScreenState extends State<HomePageScreen> {
         child: HomeAppbar(),
       ),
       body: SafeArea(
+        bottom: false,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 13),
-          child: CustomScrollView(
-            slivers: [
-              SliverPersistentHeader(
-                floating: true,
-                delegate: _SearchBarDelegate(searchController),
-              ),
-
-              SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    const Gap(10),
-                    SizedBox(
-                      height: 50,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: categoryNames.length,
-                        itemBuilder: (context, index) {
-                          bool isSelected = index == selectedCategoryIndex;
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedCategoryIndex = index;
-                              });
-                            },
-                            child: CategoriesCard(
-                              index: index,
-                              categoryName: categoryNames[index],
-                              isSelected: isSelected,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
+          child: RefreshIndicator(
+            onRefresh: () async {
+              await _productsListKey.currentState?.refreshProducts();
+            },
+            child: CustomScrollView(
+              slivers: [
+                SliverPersistentHeader(
+                  floating: true,
+                  delegate: SearchBarDelegate(searchController),
                 ),
-              ),
-              SliverToBoxAdapter(child: HomeSliderBanner()),
-              SliverGrid(
-                delegate: SliverChildBuilderDelegate(childCount: 5, (
-                  context,
-                  index,
-                ) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.of(context, rootNavigator: true).pushNamed(AppRoutes.productDetailScreen);
-                    },
-                    child: Card(
-                      shadowColor: AppColors.lightGrey0,
-                      color: AppColors.lightGrey0,
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Stack(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 8,
-                                ),
-                                child: Expanded(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(15),
-                                    ),
-                                    child: Image.asset(
-                                      'assets/products/burger_test.png',
-                                      fit: BoxFit.cover,
-                                      width: double.infinity,
-                                    ),
-                                  ),
-                                ),
-                              ),
 
-                              Positioned(
-                                bottom: 10,
-                                left: 10,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 4,
-                                    vertical: 1,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.white,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.star_rounded,
-                                        color: AppColors.lightYellow,
-                                      ),
-                                      Text(
-                                        '4.7',
-                                        style: AppTextStyle.poppins14.copyWith(
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      const Gap(10),
+                      SizedBox(
+                        height: 50,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: categoryNames.length,
+                          itemBuilder: (context, index) {
+                            bool isSelected = index == selectedCategoryIndex;
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedCategoryIndex = index;
+                                });
+                              },
+                              child: CategoriesCard(
+                                index: index,
+                                categoryName: categoryNames[index],
+                                isSelected: isSelected,
                               ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Classic Burger',
-                                  style: AppTextStyle.poppins16.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                const Gap(10),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      '\$12.50',
-                                      style: AppTextStyle.poppins20Bold,
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.all(3),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Color.fromARGB(
-                                          255,
-                                          233,
-                                          240,
-                                          228,
-                                        ),
-                                      ),
-                                      child: Icon(
-                                        Icons.add,
-                                        size: 28,
-                                        color: AppColors.darkGradientDark,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  );
-                }),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 10,
-                  childAspectRatio: 0.7,
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                SliverToBoxAdapter(child: HomeSliderBanner()),
+
+                HomeProductsList(key: _productsListKey),
+              ],
+            ),
           ),
         ),
       ),
@@ -217,10 +101,10 @@ class _HomePageScreenState extends State<HomePageScreen> {
   }
 }
 
-class _SearchBarDelegate extends SliverPersistentHeaderDelegate {
+class SearchBarDelegate extends SliverPersistentHeaderDelegate {
   final TextEditingController controller;
 
-  _SearchBarDelegate(this.controller);
+  SearchBarDelegate(this.controller);
 
   @override
   Widget build(

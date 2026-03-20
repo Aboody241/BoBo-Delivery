@@ -43,6 +43,7 @@ dependencies:
   font_awesome_flutter: ^10.12.0
   gap: ^3.0.1
   google_fonts: ^6.3.2
+  http: ^1.6.0
   icons_plus: ^5.0.0
   persistent_bottom_nav_bar: ^6.2.1
   phone_form_field: ^10.0.17
@@ -68,6 +69,8 @@ flutter:
     - assets/consts/
     - assets/on_board/
     - assets/products/
+    - assets/icons/
+    - assets/disocver/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
   # For details regarding adding assets from package dependencies, see

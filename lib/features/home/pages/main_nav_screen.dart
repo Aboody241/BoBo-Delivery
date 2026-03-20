@@ -1,4 +1,7 @@
+import 'package:bobo/features/cart/screen/cart_page.dart';
+import 'package:bobo/features/discover_page/pages/discover_screen.dart';
 import 'package:bobo/features/home/pages/home_page_screen.dart';
+import 'package:bobo/features/profile/pages/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
@@ -27,10 +30,12 @@ class _MainNavScreenState extends State<MainNavScreen> {
   List<Widget> _buildScreens() {
     return [
       const HomePageScreen(),
-      const Scaffold(body: Center(child: Text("Cart Screen"))),
-      const Scaffold(body: Center(child: Text("Search Screen"))),
+      // const DiscoverScreen(),
       const Scaffold(body: Center(child: Text("Orders Screen"))),
-      const Scaffold(body: Center(child: Text("Profile Screen"))),
+
+      const CartPage(),
+      const Scaffold(body: Center(child: Text("Orders Screen"))),
+      const UserProfileScreen(),
     ];
   }
 
@@ -43,14 +48,14 @@ class _MainNavScreenState extends State<MainNavScreen> {
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.shopping_cart_outlined),
-        title: ("Cart"),
+        icon: const Icon(Icons.search),
+        title: ("Search"),
         activeColorPrimary: Theme.of(context).colorScheme.primary,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.search_rounded),
-        title: ("Search"),
+        icon: const Icon(Icons.shopping_cart_outlined),
+        title: ("Cart"),
         activeColorPrimary: Colors.white,
         activeColorSecondary: Theme.of(context).colorScheme.primary,
         inactiveColorPrimary: Colors.grey,
@@ -72,9 +77,8 @@ class _MainNavScreenState extends State<MainNavScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
     return PersistentTabView(
-      navBarHeight: 35,
+      navBarHeight: 65,
       context,
       controller: _controller,
       screens: _buildScreens(),

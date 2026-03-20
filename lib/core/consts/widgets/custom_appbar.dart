@@ -1,3 +1,4 @@
+import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/widgets/logo.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,7 @@ class CenterLogoAndBackAppbar extends StatelessWidget {
     );
   }
 }
+
 //////////////////////////////////////////////////
 class CenterLogoAppbar extends StatelessWidget {
   const CenterLogoAppbar({super.key});
@@ -32,7 +34,6 @@ class CenterLogoAppbar extends StatelessWidget {
     );
   }
 }
-
 
 /////////////////////////////////////////////////
 class CenterandLeadingLogoAppbar extends StatelessWidget {
@@ -52,3 +53,37 @@ class CenterandLeadingLogoAppbar extends StatelessWidget {
 }
 
 // MainLogo(height: 40, wedth: 40),
+
+class CenterWidgetAppbar extends StatelessWidget {
+  const CenterWidgetAppbar({super.key, required this.title});
+
+  final Widget title;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: AppColors.white,
+      title: title,
+      centerTitle: true,
+    );
+  }
+}
+
+
+
+class CenterChildAndBackAppbar extends StatelessWidget {
+  const CenterChildAndBackAppbar({super.key, required this.title, required this.leading});
+
+  final Widget title;
+  final Widget leading;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      
+      title: title,
+      leading: leading,
+      centerTitle: true,
+    );
+  }
+}
