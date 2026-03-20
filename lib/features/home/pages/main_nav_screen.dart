@@ -30,8 +30,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
   List<Widget> _buildScreens() {
     return [
       const HomePageScreen(),
-      // const DiscoverScreen(),
-      const Scaffold(body: Center(child: Text("Orders Screen"))),
+      const DiscoverScreen(),
 
       const CartPage(),
       const Scaffold(body: Center(child: Text("Orders Screen"))),
