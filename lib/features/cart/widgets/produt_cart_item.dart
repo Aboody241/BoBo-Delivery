@@ -22,30 +22,33 @@ class ProdutCartItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 6),
+      margin: EdgeInsets.symmetric(vertical: 5),
       width: double.infinity,
       height: 110,
-      padding: const EdgeInsets.all(4),
+      padding: const EdgeInsets.all(1),
       clipBehavior: Clip.antiAlias,
       decoration: ShapeDecoration(
-        shadows: [
-          BoxShadow(
-            color: const Color.fromARGB(255, 199, 199, 199),
-            blurRadius: 2,
-            offset: Offset(0, 1),
-          ),
-        ],
+        // shadows: [
+        //   BoxShadow(
+        //     color: const Color.fromARGB(255, 199, 199, 199),
+        //     blurRadius: 2,
+        //     offset: Offset(0, 1),
+        //   ),
+        // ],
         color: Colors.white,
         shape: RoundedRectangleBorder(
-          side: BorderSide(width: 1, color: const Color(0xFFF4F7F2)),
+          side: BorderSide(
+            width: 1.5,
+            color: const Color.fromARGB(255, 226, 230, 223),
+          ),
           borderRadius: BorderRadius.circular(16),
         ),
       ),
       child: Row(
         children: [
           Container(
-            width: 100,
-            height: double.infinity,
+            width: 150,
+            height: 200,
             clipBehavior: Clip.antiAlias,
             decoration: ShapeDecoration(
               image: DecorationImage(

@@ -1,6 +1,6 @@
 import 'package:bobo/core/consts/routes/routes.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
-import 'package:bobo/services/firebase/auth_resvice.dart';
+import 'package:bobo/services/firebase/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

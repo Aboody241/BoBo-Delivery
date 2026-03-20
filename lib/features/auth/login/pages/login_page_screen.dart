@@ -4,7 +4,7 @@ import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:bobo/core/consts/widgets/custom_appbar.dart';
 import 'package:bobo/core/consts/widgets/custom_forms.dart';
 import 'package:bobo/core/consts/widgets/titled_text.dart';
-import 'package:bobo/services/firebase/auth_resvice.dart';
+import 'package:bobo/services/firebase/auth_service.dart';
 import 'package:bobo/features/auth/login/widgets/dont_have_account.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';

@@ -1,4 +1,4 @@
-import 'package:bobo/features/cart/widgets/cart_class.dart';
+import 'package:bobo/features/cart/models/cart_class.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 
