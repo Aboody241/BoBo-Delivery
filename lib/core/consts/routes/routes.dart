@@ -42,54 +42,54 @@ class AppRoutes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case splash:
-        return MaterialPageRoute(builder: (_) => const SplashScreen());
+        return MaterialPageRoute(settings: settings, builder: (_) => const SplashScreen());
 
       case mainNav:
       case homePage:
-        return MaterialPageRoute(builder: (_) => const MainNavScreen());
+        return MaterialPageRoute(settings: settings, builder: (_) => const MainNavScreen());
 
       case onBoarding:
-        return MaterialPageRoute(builder: (_) => const OnBoardPage());
+        return MaterialPageRoute(settings: settings, builder: (_) => const OnBoardPage());
 
       case onBoardingAuth:
-        return MaterialPageRoute(builder: (_) => const OnBoardingAuth());
+        return MaterialPageRoute(settings: settings, builder: (_) => const OnBoardingAuth());
       case profile:
         return MaterialPageRoute(
           builder: (_) =>
               const Scaffold(body: Center(child: Text("Profile Page"))),
         );
       case loginscreen:
-        return MaterialPageRoute(builder: (_) => const LoginPageScreen());
+        return MaterialPageRoute(settings: settings, builder: (_) => const LoginPageScreen());
       case verfiyOTPScreen:
-        return MaterialPageRoute(builder: (_) => const VerfiyOTPScreen());
+        return MaterialPageRoute(settings: settings, builder: (_) => const VerfiyOTPScreen());
       case notfoundpage:
-        return MaterialPageRoute(builder: (_) => const NotFoundScreen());
+        return MaterialPageRoute(settings: settings, builder: (_) => const NotFoundScreen());
       case resetpassword:
-        return MaterialPageRoute(builder: (_) => const ResetPasswordScreen());
+        return MaterialPageRoute(settings: settings, builder: (_) => const ResetPasswordScreen());
       case createAccount:
-        return MaterialPageRoute(builder: (_) => const CreateAccountScreen());
+        return MaterialPageRoute(settings: settings, builder: (_) => const CreateAccountScreen());
       case verfiyOTPScreenNewAccount:
         return MaterialPageRoute(
           builder: (_) => const VerfiyOTPNewAccountScreen(),
         );
       case createProfileScreen:
-        return MaterialPageRoute(builder: (_) => const CreateProfileScreen());
+        return MaterialPageRoute(settings: settings, builder: (_) => const CreateProfileScreen());
       case productDetailScreen:
-        return MaterialPageRoute(builder: (_) => const ProductDetailScreen());
+        return MaterialPageRoute(settings: settings, builder: (_) => const ProductDetailScreen());
       case checkAddressScreen:
-        return MaterialPageRoute(builder: (_) => const CheckAddressScreen());
+        return MaterialPageRoute(settings: settings, builder: (_) => const CheckAddressScreen());
       case orderSubmited:
-        return MaterialPageRoute(builder: (_) => const OrederSubmited());
+        return MaterialPageRoute(settings: settings, builder: (_) => const OrederSubmited());
       case myOrdersScreen:
-        return MaterialPageRoute(builder: (_) => const MyOrdersScreen());
+        return MaterialPageRoute(settings: settings, builder: (_) => const MyOrdersScreen());
       case userProfileScreen:
-        return MaterialPageRoute(builder: (_) => const UserProfileScreen());
+        return MaterialPageRoute(settings: settings, builder: (_) => const UserProfileScreen());
       case discoverScreen:
-        return MaterialPageRoute(builder: (_) => const DiscoverScreen());
+        return MaterialPageRoute(settings: settings, builder: (_) => const DiscoverScreen());
 
       //==============================================================================
       default:
-        return MaterialPageRoute(builder: (_) => const NotFoundScreen());
+        return MaterialPageRoute(settings: settings, builder: (_) => const NotFoundScreen());
     }
   }
 }

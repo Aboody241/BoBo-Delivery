@@ -1,8 +1,6 @@
-import 'package:bobo/core/consts/routes/routes.dart';
 import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:bobo/core/consts/widgets/custom_appbar.dart';
-import 'package:bobo/features/profile/data/general_settings_class.dart';
 import 'package:bobo/features/profile/widgets/dark_mode_widget.dart';
 import 'package:bobo/features/profile/widgets/general_setting_widget.dart';
 import 'package:bobo/features/profile/widgets/user_information_widget.dart';
@@ -14,6 +12,10 @@ class UserProfileScreen extends StatefulWidget {
 
   @override
   State<UserProfileScreen> createState() => _UserProfileScreenState();
+
+
+
+
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {

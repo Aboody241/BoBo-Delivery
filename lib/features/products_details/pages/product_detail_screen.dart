@@ -6,6 +6,7 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({super.key});
@@ -104,9 +105,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                           padding: const EdgeInsets.all(8),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
-                            child: Image.network(
-                              product.image,
+                            child: CachedNetworkImage(
+                              imageUrl: product.image,
                               fit: BoxFit.cover,
+                              memCacheWidth: 800,
+                              memCacheHeight: 800,
+                              placeholder: (context, url) => Center(
+                                child: Container(color: Colors.grey[300]),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
                             ),
                           ),
                         ),
@@ -311,7 +319,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
         padding: const EdgeInsets.only(bottom: 30, left: 20, right: 20),
         child: Row(
           children: [
-            Text('\$', style: AppTextStyle.poppins24Bold),
+            Text('\$${(product.price * productNum).toStringAsFixed(2)}',
+                style: AppTextStyle.poppins24Bold),
             const Gap(20),
             Expanded(
               child: CustomButton2(
