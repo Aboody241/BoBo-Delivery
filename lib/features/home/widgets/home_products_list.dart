@@ -1,11 +1,15 @@
+import 'package:bobo/controller/cart/cubit/cart_cubit.dart';
 import 'package:bobo/core/consts/routes/routes.dart';
 import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
+import 'package:bobo/features/cart/widgets/cart_class.dart';
 import 'package:bobo/features/home/models/products_model.dart';
 import 'package:bobo/services/products/products_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 class HomeProductsList extends StatefulWidget {
   const HomeProductsList({super.key});
@@ -108,17 +112,83 @@ class HomeProductsListState extends State<HomeProductsList> {
                                   "\$${food.price}",
                                   style: AppTextStyle.poppins20Bold,
                                 ),
-                                Container(
-                                  padding: const EdgeInsets.all(3),
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Color.fromARGB(255, 233, 240, 228),
-                                  ),
-                                  child: const Icon(
-                                    Icons.add,
-                                    size: 28,
-                                    color: AppColors.darkGradientDark,
-                                  ),
+                                BlocBuilder<CartCubit, List<CartItem>>(
+                                  builder: (context, cartItems) {
+                                    final isAdded = cartItems.any(
+                                      (item) => item.id == food.name,
+                                    );
+                                    return GestureDetector(
+                                      onTap: () {
+                                        if (isAdded) {
+                                          context.read<CartCubit>().removeItem(
+                                            food.name,
+                                          );
+                                          showSimpleNotification(
+                                            Text(
+                                              '${food.name} removed from Cart',
+                                              style: AppTextStyle.poppins14
+                                                  .copyWith(
+                                                    color: Colors.white,
+                                                  ),
+                                            ),
+                                            background: Colors.redAccent,
+                                            duration: const Duration(
+                                              seconds: 2,
+                                            ),
+                                          );
+                                        } else {
+                                          context.read<CartCubit>().addItem(
+                                            CartItem(
+                                              id: food.name,
+                                              title: food.name,
+                                              price: food.price,
+                                              imageUrl: food.image,
+                                            ),
+                                          );
+                                          // showSimpleNotification(
+                                          //   Text(
+                                          //     '${food.name} added to Cart',
+                                          //     style: AppTextStyle.poppins14.copyWith(color: Colors.white),
+                                          //   ),
+                                          //   background: AppColors.darkGradientDark,
+                                          //   duration: const Duration(seconds: 2),
+                                          // );
+                                        }
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(3),
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Color.fromARGB(
+                                            255,
+                                            233,
+                                            240,
+                                            228,
+                                          ),
+                                        ),
+                                        child: AnimatedSwitcher(
+                                          duration: const Duration(
+                                            milliseconds: 400,
+                                          ),
+                                          child: isAdded
+                                              ? const Icon(
+                                                  Icons.check,
+                                                  key: ValueKey('check'),
+                                                  size: 28,
+                                                  color: AppColors
+                                                      .darkGradientDark,
+                                                )
+                                              : const Icon(
+                                                  Icons.add,
+                                                  key: ValueKey('add'),
+                                                  size: 28,
+                                                  color: AppColors
+                                                      .darkGradientDark,
+                                                ),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ],
                             ),

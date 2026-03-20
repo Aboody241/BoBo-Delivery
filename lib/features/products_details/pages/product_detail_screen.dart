@@ -319,8 +319,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
         padding: const EdgeInsets.only(bottom: 30, left: 20, right: 20),
         child: Row(
           children: [
-            Text('\$${(product.price * productNum).toStringAsFixed(2)}',
-                style: AppTextStyle.poppins24Bold),
+            Text(
+              '\$${(product.price * productNum).toStringAsFixed(2)}',
+              style: AppTextStyle.poppins24Bold,
+            ),
             const Gap(20),
             Expanded(
               child: CustomButton2(

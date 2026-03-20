@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ProdutCartItem extends StatelessWidget {
   const ProdutCartItem({
@@ -6,6 +7,7 @@ class ProdutCartItem extends StatelessWidget {
     required this.productName,
     required this.price,
     required this.quantity,
+    required this.imageUrl,
     required this.onAdd,
     required this.onRemove,
   });
@@ -13,6 +15,7 @@ class ProdutCartItem extends StatelessWidget {
   final String productName;
   final double price;
   final int quantity;
+  final String imageUrl;
   final VoidCallback onAdd;
   final VoidCallback onRemove;
 
@@ -45,8 +48,8 @@ class ProdutCartItem extends StatelessWidget {
             height: double.infinity,
             clipBehavior: Clip.antiAlias,
             decoration: ShapeDecoration(
-              image: const DecorationImage(
-                image: AssetImage('assets/products/pizzaa.png'),
+              image: DecorationImage(
+                image: CachedNetworkImageProvider(imageUrl),
                 fit: BoxFit.cover,
               ),
               shape: RoundedRectangleBorder(
@@ -173,12 +176,4 @@ class ProdutCartItem extends StatelessWidget {
       ),
     );
   }
-}
-
-class ProducDetails {
-  final String name;
-  final double price;
-  int count;
-
-  ProducDetails({required this.name, required this.price, this.count = 1});
 }

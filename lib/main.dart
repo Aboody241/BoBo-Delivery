@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:bobo/controller/cart/cubit/cart_cubit.dart';
 import 'package:bobo/core/consts/routes/routes.dart';
 import 'package:bobo/features/discover_page/pages/discover_screen.dart';
 import 'package:bobo/features/home/pages/main_nav_screen.dart';
@@ -7,6 +8,7 @@ import 'package:bobo/features/auth/login/pages/login_page_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:bobo/core/consts/theme/colors.dart';
 
@@ -17,7 +19,7 @@ void main() {
 
       await Firebase.initializeApp();
 
-      runApp(const MyApp());
+      runApp(BlocProvider(create: (_) => CartCubit(), child: MyApp()));
     },
     (error, stackTrace) {
       debugPrint('Errorrrrrrrrrrr $error\n$stackTrace');
