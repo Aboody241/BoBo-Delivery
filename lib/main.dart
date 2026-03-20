@@ -126,7 +126,7 @@ class AuthGate extends StatelessWidget {
         }
 
         // المستخدم غير مسجل
-        return const LoginPageScreen();
+        return const SplashScreen();
       },
     );
   }

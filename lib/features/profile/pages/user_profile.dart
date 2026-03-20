@@ -31,6 +31,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //    Text('My Profile', style: AppTextStyle.poppins24Bold)
+            // ],),
             GestureDetector(onTap: () {}, child: UserInformationWidget()),
 
             Gap(30),

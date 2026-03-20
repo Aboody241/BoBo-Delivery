@@ -3,6 +3,7 @@ import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:bobo/core/consts/widgets/custom_forms.dart';
 import 'package:bobo/features/discover_page/service/categories_service.dart';
 import 'package:bobo/features/discover_page/widget/discover_category_class.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -61,18 +62,44 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(25),
                         child: categories[index].child.isNotEmpty
-                            ? Image.network(
-                                categories[index].child,
+                            ? CachedNetworkImage(
+                                imageUrl: categories[index].child,
                                 fit: BoxFit.cover, // أفضل من fill
-                                errorBuilder: (context, error, stackTrace) {
-                                  return const Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                },
+
+                                placeholder: (context, url) => Center(
+                                  child: Container(color: Colors.grey[300]),
+                                ),
+                                memCacheHeight: 1300,
+                                memCacheWidth: 1300,
+
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
                               )
+                            //  Image.network(
+                            //     categories[index].child,
+                            //     loadingBuilder: (context, child, loadingProgress) {
+                            //       if (loadingProgress == null) return child;
+                            //       return Center(
+                            //         child: CircularProgressIndicator(
+                            //           value: loadingProgress.expectedTotalBytes != null
+                            //               ? loadingProgress.cumulativeBytesLoaded /
+                            //                   loadingProgress.expectedTotalBytes!
+                            //               : null,
+                            //         ),
+                            //       );
+                            //     },
+                            //     errorBuilder: (context, error, stackTrace) {
+                            //       return const Center(
+                            //         child: CircularProgressIndicator(),
+                            //       );
+                            //     },
+                            //   )
                             : const Center(
-                                child: Icon(Icons.image_not_supported,
-                                    color: Colors.grey, size: 40),
+                                child: Icon(
+                                  Icons.image_not_supported,
+                                  color: Colors.grey,
+                                  size: 40,
+                                ),
                               ),
                       ),
                     );

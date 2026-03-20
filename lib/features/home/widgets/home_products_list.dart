@@ -3,6 +3,7 @@ import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:bobo/features/home/models/products_model.dart';
 import 'package:bobo/services/products/products_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -61,63 +62,71 @@ class HomeProductsListState extends State<HomeProductsList> {
                   rootNavigator: true,
                 ).pushNamed(AppRoutes.productDetailScreen, arguments: food);
               },
-              child: Card(
-                shadowColor: AppColors.lightGrey0,
-                color: AppColors.lightGrey0,
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  children: [
-                    ClipRRect(
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(15),
+              child: RepaintBoundary(
+                child: Card(
+                  shadowColor: AppColors.lightGrey0,
+                  color: AppColors.lightGrey0,
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(15),
+                        ),
+                        child: CachedNetworkImage(
+                          imageUrl: food.image,
+                          width: double.infinity,
+                          height: 140,
+                          fit: BoxFit.cover,
+                          memCacheWidth: 400, // 🔥 مهم
+                          memCacheHeight: 400,
+                          placeholder: (context, url) =>
+                              Container(color: Colors.grey[300]),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        ),
                       ),
-                      child: Image.network(
-                        food.image,
-                        width: 170,
-                        height: 140,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            food.name,
-                            style: AppTextStyle.poppins16.copyWith(
-                              fontWeight: FontWeight.w700,
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              food.name,
+                              style: AppTextStyle.poppins16.copyWith(
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                          ),
-                          const Gap(7),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "\$${food.price}",
-                                style: AppTextStyle.poppins20Bold,
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(3),
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Color.fromARGB(255, 233, 240, 228),
+                            const Gap(7),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "\$${food.price}",
+                                  style: AppTextStyle.poppins20Bold,
                                 ),
-                                child: const Icon(
-                                  Icons.add,
-                                  size: 28,
-                                  color: AppColors.darkGradientDark,
+                                Container(
+                                  padding: const EdgeInsets.all(3),
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Color.fromARGB(255, 233, 240, 228),
+                                  ),
+                                  child: const Icon(
+                                    Icons.add,
+                                    size: 28,
+                                    color: AppColors.darkGradientDark,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             );
