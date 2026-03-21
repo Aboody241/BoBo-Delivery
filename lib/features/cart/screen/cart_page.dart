@@ -1,4 +1,3 @@
-import 'package:bobo/core/components/not_found_screen.dart';
 import 'package:bobo/core/consts/routes/routes.dart';
 import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
@@ -120,7 +119,7 @@ class _CartPageState extends State<CartPage> {
                         rootNavigator: true,
                       ).pushNamed(AppRoutes.mainNav);
                     },
-                    title: 'Proceed to  Pay',
+                    title: 'Discover More Products',
                     hei: 60,
                   ),
                 )

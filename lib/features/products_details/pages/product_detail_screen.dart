@@ -164,7 +164,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                               color: Color(0xffF5AE42),
                               size: 30,
                             ),
-                            Text('4.8', style: AppTextStyle.poppins16),
+                            Text(
+                              product.rate.toString(),
+                              style: AppTextStyle.poppins16,
+                            ),
                           ],
                         ),
                         Row(
@@ -175,7 +178,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                               height: 20,
                             ),
                             const Gap(4),
-                            Text('300kcal', style: AppTextStyle.poppins16),
+                            Text('${product.calories} kcal', style: AppTextStyle.poppins16),
                           ],
                         ),
                         Row(
@@ -186,7 +189,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                               color: AppColors.darkBlue,
                             ),
                             const Gap(4),
-                            Text('20mins', style: AppTextStyle.poppins16),
+                            Text('${product.deliveryTime}mins', style: AppTextStyle.poppins16),
                           ],
                         ),
                       ],
@@ -273,25 +276,27 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                   const Gap(10),
 
                   /// 📝 الوصف
-                  InkWell(
+                  GestureDetector(
                     onTap: () {
                       setState(() {
                         isExpanded = !isExpanded;
                       });
                     },
                     child: Text(
-                      "No description available",
+                      product.disc ?? "No discription",
                       maxLines: isExpanded ? null : 2,
                       overflow: isExpanded
                           ? TextOverflow.visible
                           : TextOverflow.ellipsis,
                       style: AppTextStyle.poppins16.copyWith(
-                        color: AppColors.darkGrey300,
+                        // color: AppColors.darkGrey100,
+                        color: AppColors.black,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
 
-                  InkWell(
+                  GestureDetector(
                     onTap: () {
                       setState(() {
                         isExpanded = !isExpanded;
@@ -301,7 +306,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                       alignment: Alignment.centerLeft,
                       child: Text(
                         isExpanded ? 'See less' : 'Read more',
-                        style: AppTextStyle.poppins14Bold,
+                        style: AppTextStyle.poppins14Bold.copyWith(
+                          color: AppColors.darkGrey400,
+                        ),
                       ),
                     ),
                   ),

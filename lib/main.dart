@@ -3,6 +3,7 @@ import 'package:bobo/controller/cart/cubit/cart_cubit.dart';
 import 'package:bobo/core/consts/routes/routes.dart';
 import 'package:bobo/features/cart/screen/cart_page.dart';
 import 'package:bobo/features/discover_page/pages/discover_screen.dart';
+import 'package:bobo/features/favorate/pages/favorate_screen.dart';
 import 'package:bobo/features/home/pages/main_nav_screen.dart';
 import 'package:bobo/features/profile/pages/user_profile.dart';
 import 'package:bobo/features/splash/splash_screen.dart';

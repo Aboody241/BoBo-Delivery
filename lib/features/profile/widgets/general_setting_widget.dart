@@ -48,11 +48,9 @@ class _GeneralSettingWidgetState extends State<GeneralSettingWidget> {
             desc: 'Are you sure you want to logout?',
             btnCancelText: 'Cancel',
             btnOkText: 'Logout',
-            btnCancelOnPress: () {
-              Navigator.pop(context);
-            },
-            btnOkOnPress: () {
-              AuthService().logout();
+            btnCancelOnPress: () {}, // ✅ فاضية كده
+            btnOkOnPress: () async {
+              await AuthService().logout(); // ✅ await
               Navigator.of(
                 context,
                 rootNavigator: true,

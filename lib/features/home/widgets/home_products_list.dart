@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:bobo/controller/cart/cubit/cart_cubit.dart';
 import 'package:bobo/core/consts/routes/routes.dart';
 import 'package:bobo/core/consts/theme/colors.dart';
@@ -57,6 +59,7 @@ class HomeProductsListState extends State<HomeProductsList> {
               name: 'Loading Product Name',
               price: 0.0,
               image: 'https://via.placeholder.com/150',
+              rate: 0.0, disc: 'no Discription',
             ),
           );
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -89,22 +92,70 @@ class HomeProductsListState extends State<HomeProductsList> {
                     ),
                     child: Column(
                       children: [
-                        ClipRRect(
-                          borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(15),
-                          ),
-                          child: CachedNetworkImage(
-                            imageUrl: food.image,
-                            width: double.infinity,
-                            height: 140,
-                            fit: BoxFit.cover,
-                            memCacheWidth: 400, // 🔥 مهم
-                            memCacheHeight: 400,
-                            placeholder: (context, url) =>
-                                Container(color: Colors.grey[300]),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                          ),
+                        Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(15),
+                              ),
+                              child: CachedNetworkImage(
+                                imageUrl: food.image,
+                                width: double.infinity,
+                                height: 140,
+                                fit: BoxFit.cover,
+                                memCacheWidth: 400, // 🔥 مهم
+                                memCacheHeight: 400,
+                                placeholder: (context, url) =>
+                                    Container(color: Colors.grey[300]),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              child: InkWell(
+                                onTap: () {},
+                                borderRadius: BorderRadius.circular(30),
+                                child: Container(
+                                  margin: EdgeInsets.all(5),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8, // ⬆️ زيادة شوية
+                                    vertical: 3, // ⬆️ زيادة شوية
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.15),
+                                        blurRadius: 8,
+                                        offset: Offset(0, 2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.star_rounded,
+                                        color: Color(0xFFFFC107),
+                                        size: 22,
+                                      ),
+                                      SizedBox(width: 4),
+                                      Text(
+                                        food.rate.toString(),
+                                        style: AppTextStyle.poppins14.copyWith(
+                                          color: AppColors.darkGrey300,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8),
@@ -162,10 +213,16 @@ class HomeProductsListState extends State<HomeProductsList> {
                                             showSimpleNotification(
                                               Text(
                                                 '${food.name} added to Cart',
-                                                style: AppTextStyle.poppins14.copyWith(color: Colors.white),
+                                                style: AppTextStyle.poppins14
+                                                    .copyWith(
+                                                      color: Colors.white,
+                                                    ),
                                               ),
-                                              background: AppColors.darkGradientDark,
-                                              duration: const Duration(seconds: 2),
+                                              background:
+                                                  AppColors.darkGradientDark,
+                                              duration: const Duration(
+                                                seconds: 2,
+                                              ),
                                             );
                                           }
                                         },

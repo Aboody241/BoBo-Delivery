@@ -48,8 +48,11 @@ class HomeAppbar extends StatelessWidget {
               InkWell(
                 onTap: () async {
                   await AuthService().logout();
-                  if (!context.mounted) return ;
-                  Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppRoutes.onBoardingAuth);
+                  if (!context.mounted) return;
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).pushReplacementNamed(AppRoutes.onBoardingAuth);
                 },
                 child: CircleAvatar(
                   maxRadius: 25,

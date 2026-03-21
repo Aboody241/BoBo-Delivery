@@ -7,6 +7,7 @@ import 'package:bobo/features/auth/signup/pages/create_account_screen.dart';
 import 'package:bobo/features/cart/screen/check_address_screen.dart';
 import 'package:bobo/features/cart/screen/oreder_submited.dart';
 import 'package:bobo/features/discover_page/pages/discover_screen.dart';
+import 'package:bobo/features/favorate/pages/favorate_screen.dart';
 
 import 'package:bobo/features/home/pages/main_nav_screen.dart';
 import 'package:bobo/features/my_orders/pages/my_orders_screen.dart';
@@ -38,58 +39,115 @@ class AppRoutes {
   static const String userProfileScreen = '/userProfileScreen';
   static const String myOrdersScreen = '/myOrdersScreen';
   static const String discoverScreen = '/discoverScreen';
+  static const String favorateScreen = '/favorateScreen';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case splash:
-        return MaterialPageRoute(settings: settings, builder: (_) => const SplashScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const SplashScreen(),
+        );
 
       case mainNav:
       case homePage:
-        return MaterialPageRoute(settings: settings, builder: (_) => const MainNavScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const MainNavScreen(),
+        );
 
       case onBoarding:
-        return MaterialPageRoute(settings: settings, builder: (_) => const OnBoardPage());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const OnBoardPage(),
+        );
 
       case onBoardingAuth:
-        return MaterialPageRoute(settings: settings, builder: (_) => const OnBoardingAuth());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const OnBoardingAuth(),
+        );
       case profile:
         return MaterialPageRoute(
           builder: (_) =>
               const Scaffold(body: Center(child: Text("Profile Page"))),
         );
       case loginscreen:
-        return MaterialPageRoute(settings: settings, builder: (_) => const LoginPageScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const LoginPageScreen(),
+        );
       case verfiyOTPScreen:
-        return MaterialPageRoute(settings: settings, builder: (_) => const VerfiyOTPScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const VerfiyOTPScreen(),
+        );
       case notfoundpage:
-        return MaterialPageRoute(settings: settings, builder: (_) => const NotFoundScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const NotFoundScreen(),
+        );
       case resetpassword:
-        return MaterialPageRoute(settings: settings, builder: (_) => const ResetPasswordScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const ResetPasswordScreen(),
+        );
       case createAccount:
-        return MaterialPageRoute(settings: settings, builder: (_) => const CreateAccountScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const CreateAccountScreen(),
+        );
       case verfiyOTPScreenNewAccount:
         return MaterialPageRoute(
           builder: (_) => const VerfiyOTPNewAccountScreen(),
         );
       case createProfileScreen:
-        return MaterialPageRoute(settings: settings, builder: (_) => const CreateProfileScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const CreateProfileScreen(),
+        );
       case productDetailScreen:
-        return MaterialPageRoute(settings: settings, builder: (_) => const ProductDetailScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const ProductDetailScreen(),
+        );
       case checkAddressScreen:
-        return MaterialPageRoute(settings: settings, builder: (_) => const CheckAddressScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const CheckAddressScreen(),
+        );
       case orderSubmited:
-        return MaterialPageRoute(settings: settings, builder: (_) => const OrederSubmited());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const OrederSubmited(),
+        );
       case myOrdersScreen:
-        return MaterialPageRoute(settings: settings, builder: (_) => const MyOrdersScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const MyOrdersScreen(),
+        );
       case userProfileScreen:
-        return MaterialPageRoute(settings: settings, builder: (_) => const UserProfileScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const UserProfileScreen(),
+        );
       case discoverScreen:
-        return MaterialPageRoute(settings: settings, builder: (_) => const DiscoverScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const DiscoverScreen(),
+        );
+      case favorateScreen:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const FavorateScreen(),
+        );
 
       //==============================================================================
       default:
-        return MaterialPageRoute(settings: settings, builder: (_) => const NotFoundScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const NotFoundScreen(),
+        );
     }
   }
 }

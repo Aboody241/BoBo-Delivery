@@ -1,5 +1,6 @@
 import 'package:bobo/features/cart/screen/cart_page.dart';
 import 'package:bobo/features/discover_page/pages/discover_screen.dart';
+import 'package:bobo/features/favorate/pages/favorate_screen.dart';
 import 'package:bobo/features/home/pages/home_page_screen.dart';
 import 'package:bobo/features/profile/pages/user_profile.dart';
 import 'package:flutter/material.dart';
@@ -31,9 +32,8 @@ class _MainNavScreenState extends State<MainNavScreen> {
     return [
       const HomePageScreen(),
       const DiscoverScreen(),
-
       const CartPage(),
-      const Scaffold(body: Center(child: Text("Orders Screen"))),
+      const FavorateScreen(),
       const UserProfileScreen(),
     ];
   }

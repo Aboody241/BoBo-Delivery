@@ -140,6 +140,7 @@ class AppTextStyle {
 
   // Legacy Styles (kept for compatibility)
   static TextStyle poppins12 = GoogleFonts.poppins(fontSize: 12);
+  static TextStyle poppins12bold = GoogleFonts.poppins(fontSize: 12 , fontWeight: FontWeight.w600);
   static TextStyle poppins14 = GoogleFonts.poppins(fontSize: 14);
   static TextStyle poppins16 = GoogleFonts.poppins(fontSize: 16);
   static TextStyle poppins18 = GoogleFonts.poppins(fontSize: 18);
