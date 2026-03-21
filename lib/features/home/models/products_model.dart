@@ -1,5 +1,5 @@
 class Product {
-  final int? id;
+  final String id;
   final String name;
   final double price;
   final String image;
@@ -24,7 +24,8 @@ class Product {
       rate: json['rate'] * 1.0,
       disc: json['disc'] ,
       calories: json['calories'],
-      deliveryTime: json['deliveryTime'], id: json['id'],
+      deliveryTime: json['deliveryTime'], 
+      id: json['document id'] ?? json['id'] ?? '',
     );
   }
 }

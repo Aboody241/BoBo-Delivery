@@ -59,7 +59,7 @@ class HomeProductsListState extends State<HomeProductsList> {
               name: 'Loading Product Name',
               price: 0.0,
               image: 'https://via.placeholder.com/150',
-              rate: 0.0, disc: 'no Discription', id: null,
+              rate: 0.0, disc: 'no Discription', id: '0',
             ),
           );
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {

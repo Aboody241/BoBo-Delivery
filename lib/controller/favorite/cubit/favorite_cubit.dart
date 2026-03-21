@@ -19,8 +19,7 @@ class FavoriteCubit extends Cubit<List<Product>> {
     emit(current);
   }
 
-  bool isfavorite(int? productId) {
-    if (productId == null) return false;
+  bool isfavorite(String productId) {
     return state.any((item) => item.id == productId);
   }
 }

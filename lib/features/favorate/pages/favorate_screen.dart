@@ -66,8 +66,7 @@ class _FavorateScreenState extends State<FavorateScreen> {
 
                 child: InkWell(
                   onTap: () {
-                    Navigator.pushNamed(
-                      context,
+                    Navigator.of(context, rootNavigator: true).pushNamed(
                       AppRoutes.productDetailScreen,
                       arguments: product,
                     );
@@ -97,8 +96,9 @@ class _FavorateScreenState extends State<FavorateScreen> {
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
+                            const Gap(15),
                             Text(
                               product.name,
                               maxLines: 2,
@@ -118,7 +118,7 @@ class _FavorateScreenState extends State<FavorateScreen> {
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.favorite, color: Colors.red, size: 28),
+                        icon: const Icon(Icons.remove, color: Colors.grey, size: 28),
                         onPressed: () {
                           context.read<FavoriteCubit>().toggleFavorite(product);
                         },
