@@ -74,10 +74,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                 isFavorate = !isFavorate;
               });
             },
-            child: Icon(
-              isFavorate ? Icons.favorite : Icons.favorite_border_rounded,
-              size: 30,
-              color: isFavorate ? Colors.red : Colors.black,
+            child: TweenAnimationBuilder(
+              curve: Curves.elasticOut,
+              tween: Tween<double>(
+                begin: isFavorate ? 28 : 40,
+                end: isFavorate ? 40 : 28,
+              ),
+              duration: Duration(milliseconds: 400),
+              builder: (context, double size, child) {
+                return Icon(
+                  isFavorate ? Icons.favorite : Icons.favorite_border_rounded,
+                  size: size,
+                  color: isFavorate ? Colors.red : Colors.black,
+                );
+              },
             ),
           ),
           const Gap(10),
@@ -178,7 +188,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                               height: 20,
                             ),
                             const Gap(4),
-                            Text('${product.calories} kcal', style: AppTextStyle.poppins16),
+                            Text(
+                              '${product.calories} kcal',
+                              style: AppTextStyle.poppins16,
+                            ),
                           ],
                         ),
                         Row(
@@ -189,7 +202,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                               color: AppColors.darkBlue,
                             ),
                             const Gap(4),
-                            Text('${product.deliveryTime}mins', style: AppTextStyle.poppins16),
+                            Text(
+                              '${product.deliveryTime}mins',
+                              style: AppTextStyle.poppins16,
+                            ),
                           ],
                         ),
                       ],
