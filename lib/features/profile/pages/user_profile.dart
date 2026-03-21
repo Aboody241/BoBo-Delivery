@@ -52,7 +52,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       color: AppColors.darkGrey300,
                     ),
                   ),
-                  SizedBox(height: 500, child: GeneralSettingWidget()),
+                  SizedBox(height: 550, child: GeneralSettingWidget()),
 
                   Text(
                     'Theme',

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class HomeProductsList extends StatefulWidget {
   const HomeProductsList({super.key});
@@ -40,172 +41,186 @@ class HomeProductsListState extends State<HomeProductsList> {
     return FutureBuilder<List<Product>>(
       future: _productsFuture,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const SliverToBoxAdapter(
-            child: Center(child: CircularProgressIndicator()),
-          );
-        } else if (snapshot.hasError) {
+        final isLoading = snapshot.connectionState == ConnectionState.waiting;
+
+        if (snapshot.hasError) {
           return SliverToBoxAdapter(
             child: Center(child: Text('Error: ${snapshot.error}')),
+          );
+        }
+
+        final List<Product> foods;
+        if (isLoading) {
+          foods = List.generate(
+            6,
+            (index) => Product(
+              name: 'Loading Product Name',
+              price: 0.0,
+              image: 'https://via.placeholder.com/150',
+            ),
           );
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return const SliverToBoxAdapter(
             child: Center(child: Text('No products found')),
           );
+        } else {
+          foods = snapshot.data!;
         }
 
-        final foods = snapshot.data!;
-
-        return SliverGrid(
-          delegate: SliverChildBuilderDelegate((context, index) {
-            final food = foods[index];
-            return GestureDetector(
-              onTap: () {
-                Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).pushNamed(AppRoutes.productDetailScreen, arguments: food);
-              },
-              child: RepaintBoundary(
-                child: Card(
-                  shadowColor: AppColors.lightGrey0,
-                  color: AppColors.lightGrey0,
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(15),
+        return Skeletonizer.sliver(
+          enabled: snapshot.connectionState == ConnectionState.waiting,
+          child: SliverGrid(
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final food = foods[index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).pushNamed(AppRoutes.productDetailScreen, arguments: food);
+                },
+                child: RepaintBoundary(
+                  child: Card(
+                    shadowColor: AppColors.lightGrey0,
+                    color: AppColors.lightGrey0,
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(15),
+                          ),
+                          child: CachedNetworkImage(
+                            imageUrl: food.image,
+                            width: double.infinity,
+                            height: 140,
+                            fit: BoxFit.cover,
+                            memCacheWidth: 400, // 🔥 مهم
+                            memCacheHeight: 400,
+                            placeholder: (context, url) =>
+                                Container(color: Colors.grey[300]),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                          ),
                         ),
-                        child: CachedNetworkImage(
-                          imageUrl: food.image,
-                          width: double.infinity,
-                          height: 140,
-                          fit: BoxFit.cover,
-                          memCacheWidth: 400, // 🔥 مهم
-                          memCacheHeight: 400,
-                          placeholder: (context, url) =>
-                              Container(color: Colors.grey[300]),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              food.name,
-                              style: AppTextStyle.poppins16.copyWith(
-                                fontWeight: FontWeight.w700,
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                food.name,
+                                style: AppTextStyle.poppins16.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                            ),
-                            const Gap(7),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "\$${food.price}",
-                                  style: AppTextStyle.poppins20Bold,
-                                ),
-                                BlocBuilder<CartCubit, List<CartItem>>(
-                                  builder: (context, cartItems) {
-                                    final isAdded = cartItems.any(
-                                      (item) => item.id == food.name,
-                                    );
-                                    return GestureDetector(
-                                      onTap: () {
-                                        if (isAdded) {
-                                          context.read<CartCubit>().removeItem(
-                                            food.name,
-                                          );
-                                          showSimpleNotification(
-                                            Text(
-                                              '${food.name} removed from Cart',
-                                              style: AppTextStyle.poppins14
-                                                  .copyWith(
-                                                    color: Colors.white,
-                                                  ),
+                              const Gap(7),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "\$${food.price}",
+                                    style: AppTextStyle.poppins20Bold,
+                                  ),
+                                  BlocBuilder<CartCubit, List<CartItem>>(
+                                    builder: (context, cartItems) {
+                                      final isAdded = cartItems.any(
+                                        (item) => item.id == food.name,
+                                      );
+                                      return GestureDetector(
+                                        onTap: () {
+                                          if (isAdded) {
+                                            context
+                                                .read<CartCubit>()
+                                                .removeItem(food.name);
+                                            showSimpleNotification(
+                                              Text(
+                                                '${food.name} removed from Cart',
+                                                style: AppTextStyle.poppins14
+                                                    .copyWith(
+                                                      color: Colors.white,
+                                                    ),
+                                              ),
+                                              background: Colors.redAccent,
+                                              duration: const Duration(
+                                                seconds: 2,
+                                              ),
+                                            );
+                                          } else {
+                                            context.read<CartCubit>().addItem(
+                                              CartItem(
+                                                id: food.name,
+                                                title: food.name,
+                                                price: food.price,
+                                                imageUrl: food.image,
+                                              ),
+                                            );
+                                            showSimpleNotification(
+                                              Text(
+                                                '${food.name} added to Cart',
+                                                style: AppTextStyle.poppins14.copyWith(color: Colors.white),
+                                              ),
+                                              background: AppColors.darkGradientDark,
+                                              duration: const Duration(seconds: 2),
+                                            );
+                                          }
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(3),
+                                          decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Color.fromARGB(
+                                              255,
+                                              233,
+                                              240,
+                                              228,
                                             ),
-                                            background: Colors.redAccent,
+                                          ),
+                                          child: AnimatedSwitcher(
                                             duration: const Duration(
-                                              seconds: 2,
+                                              milliseconds: 400,
                                             ),
-                                          );
-                                        } else {
-                                          context.read<CartCubit>().addItem(
-                                            CartItem(
-                                              id: food.name,
-                                              title: food.name,
-                                              price: food.price,
-                                              imageUrl: food.image,
-                                            ),
-                                          );
-                                          // showSimpleNotification(
-                                          //   Text(
-                                          //     '${food.name} added to Cart',
-                                          //     style: AppTextStyle.poppins14.copyWith(color: Colors.white),
-                                          //   ),
-                                          //   background: AppColors.darkGradientDark,
-                                          //   duration: const Duration(seconds: 2),
-                                          // );
-                                        }
-                                      },
-                                      child: Container(
-                                        padding: const EdgeInsets.all(3),
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Color.fromARGB(
-                                            255,
-                                            233,
-                                            240,
-                                            228,
+                                            child: isAdded
+                                                ? const Icon(
+                                                    Icons.check,
+                                                    key: ValueKey('check'),
+                                                    size: 28,
+                                                    color: AppColors
+                                                        .darkGradientDark,
+                                                  )
+                                                : const Icon(
+                                                    Icons.add,
+                                                    key: ValueKey('add'),
+                                                    size: 28,
+                                                    color: AppColors
+                                                        .darkGradientDark,
+                                                  ),
                                           ),
                                         ),
-                                        child: AnimatedSwitcher(
-                                          duration: const Duration(
-                                            milliseconds: 400,
-                                          ),
-                                          child: isAdded
-                                              ? const Icon(
-                                                  Icons.check,
-                                                  key: ValueKey('check'),
-                                                  size: 28,
-                                                  color: AppColors
-                                                      .darkGradientDark,
-                                                )
-                                              : const Icon(
-                                                  Icons.add,
-                                                  key: ValueKey('add'),
-                                                  size: 28,
-                                                  color: AppColors
-                                                      .darkGradientDark,
-                                                ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          }, childCount: foods.length),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 10,
-            childAspectRatio: 0.72,
+              );
+            }, childCount: foods.length),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 10,
+              childAspectRatio: 0.71,
+            ),
           ),
         );
       },
