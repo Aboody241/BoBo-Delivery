@@ -1,4 +1,5 @@
 class Product {
+  final int? id;
   final String name;
   final double price;
   final String image;
@@ -12,7 +13,7 @@ class Product {
     required this.price,
     required this.image,
     required this.rate,
-    required this.disc, this.calories, this.deliveryTime,
+    required this.disc, this.calories, this.deliveryTime, required this.id,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -23,7 +24,7 @@ class Product {
       rate: json['rate'] * 1.0,
       disc: json['disc'] ,
       calories: json['calories'],
-      deliveryTime: json['deliveryTime'],
+      deliveryTime: json['deliveryTime'], id: json['id'],
     );
   }
 }

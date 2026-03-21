@@ -1,9 +1,11 @@
+import 'package:bobo/controller/favorite/cubit/favorite_cubit.dart';
 import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:bobo/core/consts/widgets/custom_buttons.dart';
 import 'package:bobo/features/home/models/products_model.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -15,27 +17,17 @@ class ProductDetailScreen extends StatefulWidget {
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
 
-class _ProductDetailScreenState extends State<ProductDetailScreen>
-    with TickerProviderStateMixin {
-  late AnimationController animationController;
-
-  bool isFavorate = false;
-
+class _ProductDetailScreenState extends State<ProductDetailScreen> {
   double currentIndex = 0;
-  int productNum = 1; // يبدأ بـ 1
+  int productNum = 1;
   bool isExpanded = false;
 
   final PageController pageController = PageController();
 
   @override
-  void initState() {
-    super.initState();
-    animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-      upperBound: 40,
-      lowerBound: 20,
-    );
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,17 +42,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
 
     final product = args;
 
-    // 🔥 السعر الديناميك
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text('Details', style: AppTextStyle.poppins24Bold),
         leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
+          onTap: () => Navigator.pop(context),
           child: const Icon(Icons.arrow_back_ios_new_sharp),
         ),
         actions: [
@@ -68,28 +56,31 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
             onPressed: () {},
             icon: Icon(Icons.share, color: AppColors.darkGrey100),
           ),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                isFavorate = !isFavorate;
-              });
+
+          // ✅ BlocBuilder فقط بدون isFavorate محلية
+          BlocBuilder<FavoriteCubit, List<Product>>(
+            builder: (context, state) {
+              final cubit = context.read<FavoriteCubit>();
+              final isFav = cubit.isfavorite(product.id);
+
+              return GestureDetector(
+                onTap: () => cubit.toggleFavorite(product),
+                child: TweenAnimationBuilder<double>(
+                  curve: Curves.elasticOut,
+                  tween: Tween<double>(begin: 28, end: isFav ? 40 : 28),
+                  duration: const Duration(milliseconds: 400),
+                  builder: (context, double size, child) {
+                    return Icon(
+                      isFav ? Icons.favorite : Icons.favorite_border_rounded,
+                      size: size,
+                      color: isFav ? Colors.red : Colors.black,
+                    );
+                  },
+                ),
+              );
             },
-            child: TweenAnimationBuilder(
-              curve: Curves.elasticOut,
-              tween: Tween<double>(
-                begin: isFavorate ? 28 : 40,
-                end: isFavorate ? 40 : 28,
-              ),
-              duration: Duration(milliseconds: 400),
-              builder: (context, double size, child) {
-                return Icon(
-                  isFavorate ? Icons.favorite : Icons.favorite_border_rounded,
-                  size: size,
-                  color: isFavorate ? Colors.red : Colors.black,
-                );
-              },
-            ),
           ),
+
           const Gap(10),
         ],
       ),
@@ -106,9 +97,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                     child: PageView(
                       controller: pageController,
                       onPageChanged: (index) {
-                        setState(() {
-                          currentIndex = index.toDouble();
-                        });
+                        setState(() => currentIndex = index.toDouble());
                       },
                       children: [
                         Container(
@@ -120,9 +109,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                               fit: BoxFit.cover,
                               memCacheWidth: 800,
                               memCacheHeight: 800,
-                              placeholder: (context, url) => Center(
-                                child: Container(color: Colors.grey[300]),
-                              ),
+                              placeholder: (context, url) =>
+                                  Container(color: Colors.grey[300]),
                               errorWidget: (context, url, error) =>
                                   const Icon(Icons.error),
                             ),
@@ -132,6 +120,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                     ),
                   ),
 
+                  // ✅ DotsIndicator بس لو عندك أكتر من صورة
+                  // لو هتضيف صور تانية في المستقبل، ضيف List<String> images في الـ Product model
+                  // وغيّر dotsCount: product.images.length
+                  // في الوقت الحالي وهي صورة واحدة، ممكن تحذف الـ DotsIndicator ده
                   DotsIndicator(
                     dotsCount: 1,
                     position: currentIndex,
@@ -151,6 +143,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Gap(20),
 
@@ -203,7 +196,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                             ),
                             const Gap(4),
                             Text(
-                              '${product.deliveryTime}mins',
+                              '${product.deliveryTime} mins',
                               style: AppTextStyle.poppins16,
                             ),
                           ],
@@ -240,9 +233,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                             GestureDetector(
                               onTap: () {
                                 if (productNum > 1) {
-                                  setState(() {
-                                    productNum--;
-                                  });
+                                  setState(() => productNum--);
                                 }
                               },
                               child: Container(
@@ -269,11 +260,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
 
                             /// ➕
                             GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  productNum++;
-                                });
-                              },
+                              onTap: () => setState(() => productNum++),
                               child: Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: const BoxDecoration(
@@ -291,41 +278,32 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
 
                   const Gap(10),
 
-                  /// 📝 الوصف
+                  /// 📝 الوصف - ✅ تم دمج الـ GestureDetector في widget واحدة
                   GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    child: Text(
-                      product.disc ?? "No discription",
-                      maxLines: isExpanded ? null : 2,
-                      overflow: isExpanded
-                          ? TextOverflow.visible
-                          : TextOverflow.ellipsis,
-                      style: AppTextStyle.poppins16.copyWith(
-                        // color: AppColors.darkGrey100,
-                        color: AppColors.black,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isExpanded = !isExpanded;
-                      });
-                    },
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        isExpanded ? 'See less' : 'Read more',
-                        style: AppTextStyle.poppins14Bold.copyWith(
-                          color: AppColors.darkGrey400,
+                    onTap: () => setState(() => isExpanded = !isExpanded),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          product.disc ?? 'No description', // ✅ typo fix
+                          maxLines: isExpanded ? null : 2,
+                          overflow: isExpanded
+                              ? TextOverflow.visible
+                              : TextOverflow.ellipsis,
+                          style: AppTextStyle.poppins16.copyWith(
+                            color: AppColors.black,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
+                        const Gap(4),
+                        // ✅ TextButton بدل GestureDetector تاني
+                        Text(
+                          isExpanded ? 'See less' : 'Read more',
+                          style: AppTextStyle.poppins14Bold.copyWith(
+                            color: AppColors.darkGrey400,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
 

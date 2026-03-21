@@ -4,7 +4,6 @@ import 'package:bobo/features/home/widgets/home_appbar.dart';
 import 'package:bobo/features/home/widgets/home_products_list.dart';
 import 'package:bobo/features/home/widgets/home_slider_banner.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 
 class HomePageScreen extends StatefulWidget {
   const HomePageScreen({super.key});
@@ -20,15 +19,6 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
   // Example categories
   final List<String> categoryNames = ['Offers', 'Burger', 'Pizza', 'Donut'];
-
-  // Example items for vertical list
-  final List<String> itemNames = [
-    'Cheese Burger',
-    'Margherita Pizza',
-    'Chocolate Donut',
-    'Vegan Salad',
-    'Fries',
-  ];
 
   int selectedCategoryIndex = 0; // افتراضياً أول عنصر مختار
 
@@ -60,36 +50,35 @@ class _HomePageScreenState extends State<HomePageScreen> {
                   delegate: SearchBarDelegate(searchController),
                 ),
 
-                SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      const Gap(10),
-                      SizedBox(
-                        height: 50,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: categoryNames.length,
-                          itemBuilder: (context, index) {
-                            bool isSelected = index == selectedCategoryIndex;
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectedCategoryIndex = index;
-                                });
-                              },
-                              child: CategoriesCard(
-                                index: index,
-                                categoryName: categoryNames[index],
-                                isSelected: isSelected,
-                              ),
-                            );
-                          },
-                        ),
+                SliverPadding(
+                  padding: const EdgeInsets.only(top: 10),
+                  sliver: SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 50,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: categoryNames.length,
+                        itemBuilder: (context, index) {
+                          bool isSelected = index == selectedCategoryIndex;
+                          return InkWell(
+                            onTap: () {
+                              setState(() {
+                                selectedCategoryIndex = index;
+                              });
+                            },
+                            borderRadius: BorderRadius.circular(12),
+                            child: CategoriesCard(
+                              index: index,
+                              categoryName: categoryNames[index],
+                              isSelected: isSelected,
+                            ),
+                          );
+                        },
                       ),
-                    ],
+                    ),
                   ),
                 ),
-                SliverToBoxAdapter(child: HomeSliderBanner()),
+                const SliverToBoxAdapter(child: HomeSliderBanner()),
 
                 HomeProductsList(key: _productsListKey),
               ],
@@ -125,6 +114,6 @@ class SearchBarDelegate extends SliverPersistentHeaderDelegate {
   double get minExtent => 60;
 
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
-      false;
+  bool shouldRebuild(covariant SearchBarDelegate oldDelegate) =>
+      oldDelegate.controller != controller;
 }

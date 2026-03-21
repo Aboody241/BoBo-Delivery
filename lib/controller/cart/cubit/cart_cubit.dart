@@ -1,6 +1,5 @@
 import 'package:bobo/features/cart/models/cart_class.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
 
 class CartCubit extends Cubit<List<CartItem>> {
   CartCubit() : super([]);
@@ -38,6 +37,3 @@ class CartCubit extends Cubit<List<CartItem>> {
     emit([]);
   }
 }
-
-
-

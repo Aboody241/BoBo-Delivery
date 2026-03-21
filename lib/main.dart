@@ -1,13 +1,9 @@
 import 'dart:async';
 import 'package:bobo/controller/cart/cubit/cart_cubit.dart';
+import 'package:bobo/controller/favorite/cubit/favorite_cubit.dart';
 import 'package:bobo/core/consts/routes/routes.dart';
-import 'package:bobo/features/cart/screen/cart_page.dart';
-import 'package:bobo/features/discover_page/pages/discover_screen.dart';
-import 'package:bobo/features/favorate/pages/favorate_screen.dart';
 import 'package:bobo/features/home/pages/main_nav_screen.dart';
-import 'package:bobo/features/profile/pages/user_profile.dart';
 import 'package:bobo/features/splash/splash_screen.dart';
-import 'package:bobo/features/auth/login/pages/login_page_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -24,9 +20,11 @@ void main() {
       await Firebase.initializeApp();
 
       runApp(
-        // BlocProvider(create: (_) => CartCubit(), child: MyApp())
         MultiBlocProvider(
-          providers: [BlocProvider(create: (context) => CartCubit())],
+          providers: [
+            BlocProvider(create: (context) => CartCubit()),
+            BlocProvider(create: (context) => FavoriteCubit()),
+          ],
           child: MyApp(),
         ),
       );
