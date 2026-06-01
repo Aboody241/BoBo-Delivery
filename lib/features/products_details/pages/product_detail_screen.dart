@@ -9,6 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:bobo/controller/cart/cubit/cart_cubit.dart';
+import 'package:bobo/features/cart/models/cart_class.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({super.key});
@@ -73,7 +76,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     return Icon(
                       isFav ? Icons.favorite : Icons.favorite_border_rounded,
                       size: size,
-                      color: isFav ? Colors.red : Colors.black,
+                      color: isFav
+                          ? Colors.red
+                          : Theme.of(context).colorScheme.onSurface,
                     );
                   },
                 ),
@@ -250,7 +255,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                             AnimatedDefaultTextStyle(
                               style: AppTextStyle.poppins20Bold.copyWith(
-                                color: Colors.black,
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                               duration: const Duration(milliseconds: 300),
                               child: Text(productNum.toString()),
@@ -291,7 +296,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               ? TextOverflow.visible
                               : TextOverflow.ellipsis,
                           style: AppTextStyle.poppins16.copyWith(
-                            color: AppColors.black,
+                            color: Theme.of(context).colorScheme.onSurface,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -327,7 +332,27 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             const Gap(20),
             Expanded(
               child: CustomButton2(
-                onPressed: () {},
+                onPressed: () {
+                  context.read<CartCubit>().addItemWithQuantity(
+                    CartItem(
+                      id: product.name,
+                      title: product.name,
+                      price: product.price,
+                      imageUrl: product.image,
+                    ),
+                    productNum,
+                  );
+                  showSimpleNotification(
+                    Text(
+                      '$productNum x ${product.name} added to Cart',
+                      style: AppTextStyle.poppins14.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                    background: AppColors.darkGradientDark,
+                    duration: const Duration(seconds: 2),
+                  );
+                },
                 title: 'Add to cart',
                 hei: 55,
               ),

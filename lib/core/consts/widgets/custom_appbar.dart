@@ -1,4 +1,3 @@
-import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/widgets/logo.dart';
 import 'package:flutter/material.dart';
 
@@ -62,28 +61,25 @@ class CenterWidgetAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       title: title,
       centerTitle: true,
     );
   }
 }
 
-
-
 class CenterChildAndBackAppbar extends StatelessWidget {
-  const CenterChildAndBackAppbar({super.key, required this.title, required this.leading});
+  const CenterChildAndBackAppbar({
+    super.key,
+    required this.title,
+    required this.leading,
+  });
 
   final Widget title;
   final Widget leading;
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      
-      title: title,
-      leading: leading,
-      centerTitle: true,
-    );
+    return AppBar(title: title, leading: leading, centerTitle: true);
   }
 }

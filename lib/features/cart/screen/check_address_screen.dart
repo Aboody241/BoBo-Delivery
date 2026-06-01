@@ -6,6 +6,8 @@ import 'package:bobo/core/consts/widgets/custom_buttons.dart';
 import 'package:bobo/core/consts/widgets/custom_forms.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:bobo/controller/cart/cubit/cart_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CheckAddressScreen extends StatelessWidget {
   const CheckAddressScreen({super.key});
@@ -37,6 +39,7 @@ class CheckAddressScreen extends StatelessWidget {
               CustomButton2(
                 title: 'Submit Order',
                 onPressed: () {
+                  context.read<CartCubit>().clearCart();
                   Navigator.of(
                         context,
                         rootNavigator: true,

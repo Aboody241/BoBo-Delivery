@@ -27,8 +27,8 @@ class ProductsCards extends StatelessWidget {
         ),
         itemBuilder: (context, index) {
           return Card(
-            shadowColor: AppColors.lightGrey0,
-            color: AppColors.lightGrey0,
+            shadowColor: Theme.of(context).colorScheme.shadow,
+            color: Theme.of(context).cardColor,
             elevation: 2,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
@@ -78,12 +78,7 @@ class ProductsCards extends StatelessWidget {
                             padding: EdgeInsets.all(3),
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Color.fromARGB(
-                                255,
-                                233,
-                                240,
-                                228,
-                              ),
+                              color: Theme.of(context).colorScheme.primary.withOpacity(0.15),
                             ),
                             child: Icon(
                               Icons.add,

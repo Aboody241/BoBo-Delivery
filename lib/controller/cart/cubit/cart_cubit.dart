@@ -15,6 +15,18 @@ class CartCubit extends Cubit<List<CartItem>> {
     }
   }
 
+  void addItemWithQuantity(CartItem item, int quantity) {
+    final existingIndex = state.indexWhere((i) => i.id == item.id);
+    if (existingIndex >= 0) {
+      final updatedList = List<CartItem>.from(state);
+      updatedList[existingIndex].quantity += quantity;
+      emit(updatedList);
+    } else {
+      item.quantity = quantity;
+      emit([...state, item]);
+    }
+  }
+
   void decrementItem(String id) {
     final existingIndex = state.indexWhere((i) => i.id == id);
     if (existingIndex >= 0) {

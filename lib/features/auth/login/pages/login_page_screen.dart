@@ -131,24 +131,41 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
 
                       const Spacer(),
 
-                      // Login button
                       _LoginButton(
-                        onPressed: (isButtonEnabled && !isloading)
-                            ? () {
-                                login();
-                              }
-                            : null,
-                        child: isloading
-                            ? CircularProgressIndicator()
-                            : Text(
-                                'Log in',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
+                        onPressed: () {
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            AppRoutes.mainNav,
+                            (route) => false,
+                          );
+                        },
+                        child: Text(
+                          'Log in',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+
+                        // onPressed:
+                        // (isButtonEnabled && !isloading)
+                        //     ? () {
+                        //         login();
+                        //       }
+                        //     : null,
+                        // child: isloading
+                        //     ? CircularProgressIndicator()
+                        //     : Text(
+                        //         'Log in',
+                        //         style: TextStyle(
+                        //           color: Colors.white,
+                        //           fontSize: 18,
+                        //           fontWeight: FontWeight.w700,
+                        //           fontFamily: 'Poppins',
+                        //         ),
+                        //       ),
                       ),
 
                       const Gap(5),

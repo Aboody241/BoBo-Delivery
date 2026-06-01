@@ -55,6 +55,7 @@ class AppColors {
   static const Color darkTypography300 = Color(0xFF9FA19E);
   static const Color darkTypography400 = Color(0xFFC0C0C7);
   static const Color darkTypography500 = Color(0xFFEEF0ED);
+  static const Color back = Color.fromARGB(255, 243, 244, 241);
 
   static const Color darkGrey0 = Color(0xFF1E2225);
   static const Color darkGrey50 = Color(0xFF2D2F30);

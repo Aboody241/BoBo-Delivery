@@ -146,7 +146,7 @@ class _CartPageState extends State<CartPage> {
                             Navigator.of(
                               context,
                               rootNavigator: true,
-                            ).pushNamed(AppRoutes.checkAddressScreen);
+                            ).pushNamed(AppRoutes.palceOrderScreen);
                           },
                           title: 'Proceed to  Pay',
                           hei: 60,

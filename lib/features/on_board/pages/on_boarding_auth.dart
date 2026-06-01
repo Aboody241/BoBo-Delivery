@@ -31,8 +31,8 @@ class _OnBoardingAuthState extends State<OnBoardingAuth>
   @override
   Widget build(BuildContext context) {
     final List<IconData> icons = [
-      FontAwesomeIcons.google,
-      FontAwesomeIcons.apple,
+      FontAwesomeIcons.google.data,
+      FontAwesomeIcons.apple.data,
       Icons.email,
     ];
     return Scaffold(
@@ -76,7 +76,11 @@ class _OnBoardingAuthState extends State<OnBoardingAuth>
 
             CustomButton(
               onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.mainNav);
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppRoutes.mainNav,
+                  (route) => false,
+                );
               },
               text: "Continue as Guest",
               gradient: LinearGradient(

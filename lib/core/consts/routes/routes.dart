@@ -4,8 +4,13 @@ import 'package:bobo/features/auth/forgetpassword/pages/verfieOPTpage.dart';
 import 'package:bobo/features/auth/login/pages/login_page_screen.dart';
 import 'package:bobo/features/auth/reset_password/pages/reset_password_screen.dart';
 import 'package:bobo/features/auth/signup/pages/create_account_screen.dart';
+import 'package:bobo/features/cart/screen/changeAddress/change_address.dart';
+import 'package:bobo/features/cart/screen/changeCard/change_card.dart';
 import 'package:bobo/features/cart/screen/check_address_screen.dart';
+import 'package:bobo/features/cart/screen/chickout/chickout_screen.dart';
+import 'package:bobo/features/cart/screen/coupon/add_coupone.dart';
 import 'package:bobo/features/cart/screen/oreder_submited.dart';
+import 'package:bobo/features/cart/screen/place_order_screen.dart';
 import 'package:bobo/features/discover_page/pages/discover_screen.dart';
 import 'package:bobo/features/favorate/pages/favorate_screen.dart';
 
@@ -40,6 +45,11 @@ class AppRoutes {
   static const String myOrdersScreen = '/myOrdersScreen';
   static const String discoverScreen = '/discoverScreen';
   static const String favorateScreen = '/favorateScreen';
+  static const String palceOrderScreen = '/palceOrderScreen';
+  static const String addCoupone = '/addCouponeScreen';
+  static const String chickoutScreen = '/chickoutScreen';
+  static const String changeAddress = '/changeAddressScreen';
+  static const String changeCard = '/changeCardScreen';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -140,6 +150,31 @@ class AppRoutes {
         return MaterialPageRoute(
           settings: settings,
           builder: (_) => const FavorateScreen(),
+        );
+      case palceOrderScreen:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const PlaceOrderScreen(),
+        );
+      case addCoupone:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const AddCoupone(),
+        );
+      case chickoutScreen:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const ChickoutScreen(),
+        );
+      case changeAddress:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const ChangeAddress(),
+        );
+      case changeCard:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const ChangeCardScreen(),
         );
 
       //==============================================================================

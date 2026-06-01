@@ -25,23 +25,23 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
 
   bool isvalid = false;
 
-  void validator() {
-    setState(() {
-      isvalid =
-          nameController.text.isNotEmpty &&
-          birthController.text.isNotEmpty &&
-          addressController.text.isNotEmpty &&
-          phoneController.value.toString().isNotEmpty &&
-          nameController.text.contains(' ');
-    });
-  }
+  // void validator() {
+  //   setState(() {
+  //     isvalid =
+  //         nameController.text.isNotEmpty &&
+  //         birthController.text.isNotEmpty &&
+  //         addressController.text.isNotEmpty &&
+  //         phoneController.value.toString().isNotEmpty &&
+  //         nameController.text.contains(' ');
+  //   });
+  // }
 
   @override
   void initState() {
-    nameController.addListener(validator);
-    phoneController.addListener(validator);
-    birthController.addListener(validator);
-    addressController.addListener(validator);
+    // nameController.addListener(validator);
+    // phoneController.addListener(validator);
+    // birthController.addListener(validator);
+    // addressController.addListener(validator);
     super.initState();
   }
 
@@ -86,11 +86,13 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
               ),
               Gap(80),
               EnabledButton(
-                onPressed: isvalid
-                    ? () {
-                        Navigator.pushNamed(context, AppRoutes.mainNav);
-                      }
-                    : null,
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    AppRoutes.mainNav,
+                    (route) => false,
+                  );
+                },
                 hei: 55,
                 child: Text('Continue', style: ButtonTextStyle.button),
               ),

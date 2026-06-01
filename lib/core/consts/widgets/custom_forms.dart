@@ -135,7 +135,7 @@ class CustomSearchBar extends StatelessWidget {
         color: Colors.grey[000], // خلفية فاتحة مثل الصورة
         borderRadius: BorderRadius.circular(15), 
         border:Border.all(
-          color: Color.fromARGB(255, 235, 236, 234),
+          color: AppColors.borderColor,
           width: 1.5
         )// أركان دائرية خفيفة
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:gap/gap.dart';
 
 class ProdutCartItem extends StatelessWidget {
   const ProdutCartItem({
@@ -22,57 +23,49 @@ class ProdutCartItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
+      margin: EdgeInsets.all(5),
       width: double.infinity,
-      height: 110,
-      padding: const EdgeInsets.all(1),
-      clipBehavior: Clip.antiAlias,
+      height: 120,
       decoration: ShapeDecoration(
-        // shadows: [
-        //   BoxShadow(
-        //     color: const Color.fromARGB(255, 199, 199, 199),
-        //     blurRadius: 2,
-        //     offset: Offset(0, 1),
-        //   ),
-        // ],
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(
-          side: BorderSide(
+          side: const BorderSide(
             width: 1.5,
-            color: const Color.fromARGB(255, 226, 230, 223),
+            color: Color.fromARGB(255, 228, 233, 225),
           ),
           borderRadius: BorderRadius.circular(16),
         ),
       ),
       child: Row(
         children: [
-          Container(
-            width: 150,
-            height: 200,
-            clipBehavior: Clip.antiAlias,
-            decoration: ShapeDecoration(
-              image: DecorationImage(
-                image: CachedNetworkImageProvider(imageUrl),
-                fit: BoxFit.cover,
-              ),
-              shape: RoundedRectangleBorder(
-                side: BorderSide(width: 1, color: const Color(0x0F91958E)),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(4),
-                  bottomLeft: Radius.circular(12),
-                  bottomRight: Radius.circular(4),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 5
+            ),
+            child: Container(
+              width: 108,
+              height: 108,
+              clipBehavior: Clip.antiAlias,
+              decoration: ShapeDecoration(
+                image: DecorationImage(
+                  image: CachedNetworkImageProvider(imageUrl),
+                  fit: BoxFit.cover,
+                ),
+                shape: RoundedRectangleBorder(
+                  side: const BorderSide(width: 1, color: Color(0x0F91958E)),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    bottomLeft: Radius.circular(8)
+                  ),
                 ),
               ),
             ),
           ),
-
-          const SizedBox(width: 8),
-
+          Gap(5),
           Expanded(
             child: Container(
               height: double.infinity,
-              padding: const EdgeInsets.only(top: 8, right: 8, bottom: 8),
+              padding: const EdgeInsets.only(top: 12, right: 12, bottom: 12),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,14 +73,15 @@ class ProdutCartItem extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 8),
-
                       SizedBox(
-                        width: 211,
                         child: Text(
                           productName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: Color(0xFF60655C),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurface.withValues(alpha: 0.7),
                             fontSize: 16,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w500,
@@ -101,21 +95,17 @@ class ProdutCartItem extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
-                        width: 109,
-                        child: Text(
-                          "\$$price",
-                          style: TextStyle(
-                            color: Color(0xFF363A33),
-                            fontSize: 15,
-                            fontFamily: 'Roboto',
-                            fontWeight: FontWeight.w600,
-                            height: 1.30,
-                          ),
+                      Text(
+                        "\$$price",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontSize: 18,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w800,
+                          height: 1.30,
                         ),
                       ),
 
-                      // const SizedBox(width: 12),
                       Row(
                         children: [
                           GestureDetector(
@@ -125,32 +115,40 @@ class ProdutCartItem extends StatelessWidget {
                               height: 32,
                               clipBehavior: Clip.antiAlias,
                               decoration: ShapeDecoration(
-                                color: const Color(0xFFF4F7F2),
+                                color: const Color.fromARGB(255, 241, 244, 238),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(24),
                                 ),
                               ),
-                              child: const Icon(Icons.remove),
+                              child: Icon(
+                                quantity == 1
+                                    ? Icons.delete_outline_rounded
+                                    : Icons.remove,
+                                color: const Color(0xff60635E),
+                                size: quantity == 1 ? 18 : 20,
+                              ),
                             ),
                           ),
 
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 12),
 
                           AnimatedDefaultTextStyle(
-                            style: const TextStyle(
-                              color: Color(0xFF60655C),
+                            style: TextStyle(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurface.withValues(alpha: 0.7),
                               fontSize: 18,
                               fontFamily: 'Roboto Mono',
                               fontWeight: FontWeight.w700,
                               height: 1.30,
                               letterSpacing: -0.15,
                             ),
-                            duration: Duration(seconds: 4),
+                            duration: const Duration(seconds: 4),
                             curve: Curves.bounceIn,
                             child: Text('$quantity'),
                           ),
 
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 12),
 
                           GestureDetector(
                             onTap: onAdd,
@@ -159,12 +157,16 @@ class ProdutCartItem extends StatelessWidget {
                               height: 32,
                               clipBehavior: Clip.antiAlias,
                               decoration: ShapeDecoration(
-                                color: const Color(0xFFF4F7F2),
+                                color: const Color.fromARGB(255, 241, 244, 238),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(24),
                                 ),
                               ),
-                              child: const Icon(Icons.add),
+                              child: const Icon(
+                                Icons.add,
+                                color: Color(0xff60635E),
+                                size: 20,
+                              ),
                             ),
                           ),
                         ],

@@ -11,13 +11,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:bobo/firebase_options.dart';
 
 void main() {
   runZonedGuarded<Future<void>>(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
 
-      await Firebase.initializeApp();
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
 
       runApp(
         MultiBlocProvider(
@@ -127,18 +130,19 @@ class AuthGate extends StatelessWidget {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
-        // أثناء تحميل Firebase
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const SplashScreen();
-        }
+        // // أثناء تحميل Firebase
+        // if (snapshot.connectionState == ConnectionState.waiting) {
+        //   return const SplashScreen();
+        // }
 
-        // المستخدم مسجل دخول
-        if (snapshot.hasData) {
-          return const MainNavScreen();
-        }
+        // // المستخدم مسجل دخول
+        // if (snapshot.hasData) {
+        //   return const MainNavScreen();
+        // }
 
-        // المستخدم غير مسجل
-        return const SplashScreen();
+        // // المستخدم غير مسجل
+        // return const SplashScreen();
+        return SplashScreen();
       },
     );
   }

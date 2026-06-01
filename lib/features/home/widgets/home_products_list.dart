@@ -59,7 +59,9 @@ class HomeProductsListState extends State<HomeProductsList> {
               name: 'Loading Product Name',
               price: 0.0,
               image: 'https://via.placeholder.com/150',
-              rate: 0.0, disc: 'no Discription', id: '0',
+              rate: 0.0,
+              disc: 'no Discription',
+              id: '0',
             ),
           );
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -83,11 +85,9 @@ class HomeProductsListState extends State<HomeProductsList> {
                   ).pushNamed(AppRoutes.productDetailScreen, arguments: food);
                 },
                 child: RepaintBoundary(
-                  child: Card(
-                    shadowColor: AppColors.lightGrey0,
-                    color: AppColors.lightGrey0,
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.borderColor),
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Column(
@@ -125,7 +125,7 @@ class HomeProductsListState extends State<HomeProductsList> {
                                   ),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(30),
-                                    color: Colors.white,
+                                    color: Theme.of(context).cardColor,
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.black.withOpacity(0.15),
@@ -228,14 +228,12 @@ class HomeProductsListState extends State<HomeProductsList> {
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.all(3),
-                                          decoration: const BoxDecoration(
+                                          decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: Color.fromARGB(
-                                              255,
-                                              233,
-                                              240,
-                                              228,
-                                            ),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary
+                                                .withOpacity(0.15),
                                           ),
                                           child: AnimatedSwitcher(
                                             duration: const Duration(

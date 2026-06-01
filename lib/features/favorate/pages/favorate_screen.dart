@@ -2,7 +2,6 @@ import 'package:bobo/controller/favorite/cubit/favorite_cubit.dart';
 import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:bobo/core/consts/widgets/custom_appbar.dart';
-import 'package:bobo/features/discover_page/pages/discover_screen.dart';
 import 'package:bobo/features/home/models/products_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +59,7 @@ class _FavorateScreenState extends State<FavorateScreen> {
                 width: double.infinity,
                 height: 130,
                 decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.borderColor),
+                  border: Border.all(color: Theme.of(context).dividerColor),
                   borderRadius: BorderRadius.circular(12),
                 ),
 
@@ -88,8 +87,10 @@ class _FavorateScreenState extends State<FavorateScreen> {
                           imageUrl: product.image,
                           memCacheWidth: 500,
                           memCacheHeight: 500,
-                          placeholder: (context, url) => Container(color: Colors.grey[300]),
-                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                          placeholder: (context, url) =>
+                              Container(color: Colors.grey[300]),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
                         ),
                       ),
                       const Gap(10),
@@ -118,7 +119,11 @@ class _FavorateScreenState extends State<FavorateScreen> {
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.remove, color: Colors.grey, size: 28),
+                        icon: const Icon(
+                          Icons.remove,
+                          color: Colors.grey,
+                          size: 28,
+                        ),
                         onPressed: () {
                           context.read<FavoriteCubit>().toggleFavorite(product);
                         },

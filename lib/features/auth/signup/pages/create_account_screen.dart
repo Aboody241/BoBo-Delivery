@@ -137,11 +137,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             Spacer(),
 
             EnabledButton(
-              onPressed: (isvalid && !isloading) ? regstire : null,
+              onPressed: () {
+                Navigator.pushReplacementNamed(
+                  context,
+                  AppRoutes.createProfileScreen,
+                );
+              },
               hei: 55,
-              child: isloading
-                  ? CircularProgressIndicator(color: Colors.white)
-                  : Text('Register', style: ButtonTextStyle.button),
+              child: Text('Register', style: ButtonTextStyle.button),
             ),
 
             HaveAccountWidget(),

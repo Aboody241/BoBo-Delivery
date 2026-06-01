@@ -15,7 +15,7 @@ class HomeAppbar extends StatelessWidget {
 
     return AppBar(
       automaticallyImplyLeading: false,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       elevation: 1,
       title: FutureBuilder<DocumentSnapshot>(
         future: userRef.get(),
