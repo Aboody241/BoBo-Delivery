@@ -1,5 +1,6 @@
 import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
+import 'package:bobo/core/consts/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -51,47 +52,15 @@ class _ChangeAddressState extends State<ChangeAddress> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        automaticallyImplyLeading: false,
-        leadingWidth: 90,
-        leading: TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(
-            'Cancel',
-            style: AppTextStyle.poppins18Bold.copyWith(
-              color: AppColors.lightTypography200,
-            ),
-          ),
-        ),
-        centerTitle: true,
-        title: Text(
-          "Change address",
-          style: AppTextStyle.poppins20Bold.copyWith(
-            color: AppColors.black,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              // Return the selected address object
-              final selected = addresses.firstWhere(
-                (addr) => addr['title'] == _selectedAddressTitle,
-                orElse: () => addresses.first,
-              );
-              Navigator.pop(context, selected);
-            },
-            child: Text(
-              "Save",
-              style: AppTextStyle.poppins18Bold.copyWith(
-                color: AppColors.lightPrimary500,
-              ),
-            ),
-          ),
-          const Gap(10),
-        ],
+      appBar: CancelSaveAppBar(
+        title: 'Change address',
+        onSave: () {
+          final selected = addresses.firstWhere(
+            (addr) => addr['title'] == _selectedAddressTitle,
+            orElse: () => addresses.first,
+          );
+          Navigator.pop(context, selected);
+        },
       ),
       body: ListView.builder(
         padding: const EdgeInsets.symmetric(vertical: 15),

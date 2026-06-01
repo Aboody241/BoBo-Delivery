@@ -1,5 +1,6 @@
 import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
+import 'package:bobo/core/consts/widgets/custom_appbar.dart';
 import 'package:bobo/core/consts/widgets/custom_forms.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -52,42 +53,11 @@ class _AddCouponeState extends State<AddCoupone> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        automaticallyImplyLeading: false,
-        leadingWidth: 90,
-        leading: TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(
-            'Cancel',
-            style: AppTextStyle.poppins18Bold.copyWith(
-              color: AppColors.lightTypography200,
-            ),
-          ),
-        ),
-        centerTitle: true,
-        title: Text(
-          "Add Coupon",
-          style: AppTextStyle.poppins20Bold.copyWith(
-            color: AppColors.black,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context, _selectedCouponCode);
-            },
-            child: Text(
-              "Save",
-              style: AppTextStyle.poppins18Bold.copyWith(
-                color: AppColors.lightPrimary500,
-              ),
-            ),
-          ),
-          const Gap(10),
-        ],
+      appBar: CancelSaveAppBar(
+        title: 'Add Coupon',
+        onSave: () {
+          Navigator.pop(context, _selectedCouponCode);
+        },
       ),
 
       body: CustomScrollView(

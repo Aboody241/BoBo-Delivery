@@ -20,6 +20,13 @@ import 'package:bobo/features/products_details/pages/product_detail_screen.dart'
 import 'package:bobo/features/on_board/pages/on_board_page.dart';
 import 'package:bobo/features/on_board/pages/on_boarding_auth.dart';
 import 'package:bobo/features/profile/pages/create_profile_screen.dart';
+import 'package:bobo/features/profile/pages/my_account/my_account_screen.dart';
+import 'package:bobo/features/profile/pages/payment_methods/payment_methods_screen.dart';
+import 'package:bobo/features/profile/pages/payment_methods/add_card_screen.dart';
+import 'package:bobo/features/profile/pages/addresses/addresses_screen.dart';
+import 'package:bobo/features/profile/pages/addresses/add_address_screen.dart';
+import 'package:bobo/features/profile/pages/settings/settings_screen.dart';
+import 'package:bobo/features/profile/pages/settings/language_screen.dart';
 import 'package:bobo/features/profile/pages/user_profile.dart';
 import 'package:bobo/features/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +57,13 @@ class AppRoutes {
   static const String chickoutScreen = '/chickoutScreen';
   static const String changeAddress = '/changeAddressScreen';
   static const String changeCard = '/changeCardScreen';
+  static const String myAccountScreen = '/myAccountScreen';
+  static const String paymentMethods = '/paymentMethodsScreen';
+  static const String addCard = '/addCardScreen';
+  static const String addresses = '/addressesScreen';
+  static const String addAddress = '/addAddressScreen';
+  static const String settings = '/settingsScreen';
+  static const String language = '/languageScreen';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -175,6 +189,41 @@ class AppRoutes {
         return MaterialPageRoute(
           settings: settings,
           builder: (_) => const ChangeCardScreen(),
+        );
+      case myAccountScreen:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const MyAccountScreen(),
+        );
+      case paymentMethods:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const PaymentMethodsScreen(),
+        );
+      case addCard:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const AddCardScreen(),
+        );
+      case addresses:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const AddressesScreen(),
+        );
+      case addAddress:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const AddAddressScreen(),
+        );
+      case AppRoutes.settings:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const SettingsScreen(),
+        );
+      case language:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const LanguageScreen(),
         );
 
       //==============================================================================

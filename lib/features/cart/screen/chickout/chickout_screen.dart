@@ -348,6 +348,7 @@ class _ChickoutScreenState extends State<ChickoutScreen> {
                   flex: 5,
                   child: GestureDetector(
                     onTap: () {
+                      context.read<CartCubit>().clearCart();
                       Navigator.of(
                         context,
                         rootNavigator: true,

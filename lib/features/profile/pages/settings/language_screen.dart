@@ -4,24 +4,27 @@ import 'package:bobo/core/consts/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class ChangeCardScreen extends StatefulWidget {
-  const ChangeCardScreen({super.key});
+class LanguageScreen extends StatefulWidget {
+  const LanguageScreen({super.key});
 
   @override
-  State<ChangeCardScreen> createState() => _ChangeCardScreenState();
+  State<LanguageScreen> createState() => _LanguageScreenState();
 }
 
-class _ChangeCardScreenState extends State<ChangeCardScreen> {
-  String? _selectedCardTitle = 'Mastercard - Daniel Jones';
+class _LanguageScreenState extends State<LanguageScreen> {
+  String _selectedLanguage = 'English';
   bool _isInitialized = false;
 
-  final List<Map<String, String>> cards = [
-    {
-      'title': 'Mastercard - Daniel Jones',
-    },
-    {
-      'title': 'Mastercard - Emily Jones',
-    },
+  final List<String> _languages = [
+    'English',
+    'Hindi',
+    'Sanskrit',
+    'Urdu',
+    'French',
+    'Spanish',
+    'Chinese',
+    'Japanese',
+    'Korean',
   ];
 
   @override
@@ -31,7 +34,7 @@ class _ChangeCardScreenState extends State<ChangeCardScreen> {
       final args = ModalRoute.of(context)?.settings.arguments;
       if (args != null && args is String) {
         setState(() {
-          _selectedCardTitle = args;
+          _selectedLanguage = args;
         });
       }
       _isInitialized = true;
@@ -43,41 +46,37 @@ class _ChangeCardScreenState extends State<ChangeCardScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CancelSaveAppBar(
-        title: 'Change card',
+        title: 'Language',
         onSave: () {
-          final selected = cards.firstWhere(
-            (c) => c['title'] == _selectedCardTitle,
-            orElse: () => cards.first,
-          );
-          Navigator.pop(context, selected);
+          Navigator.pop(context, _selectedLanguage);
         },
       ),
       body: ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 15),
-        itemCount: cards.length,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        itemCount: _languages.length,
         itemBuilder: (context, index) {
-          final card = cards[index];
-          final isSelected = _selectedCardTitle == card['title'];
+          final lang = _languages[index];
+          final isSelected = _selectedLanguage == lang;
 
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+            padding: const EdgeInsets.only(bottom: 12),
             child: GestureDetector(
               onTap: () {
                 setState(() {
-                  _selectedCardTitle = card['title'];
+                  _selectedLanguage = lang;
                 });
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 16),
+                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF9FAF8),
+                  color: AppColors.back,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
                   children: [
                     Expanded(
                       child: Text(
-                        card['title']!,
+                        lang,
                         style: AppTextStyle.poppins16.copyWith(
                           color: Colors.black87,
                           fontWeight: FontWeight.w500,
@@ -91,8 +90,10 @@ class _ChangeCardScreenState extends State<ChangeCardScreen> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: isSelected ? AppColors.lightPrimary500 : const Color(0xFFEBECE9),
-                          width: 2,
+                          color: isSelected
+                              ? AppColors.lightPrimary500
+                              : const Color(0xFFEBECE9),
+                          width: 2.2,
                         ),
                         color: Colors.transparent,
                       ),

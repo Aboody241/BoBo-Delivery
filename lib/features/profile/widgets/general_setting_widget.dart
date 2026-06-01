@@ -21,7 +21,15 @@ class _GeneralSettingWidgetState extends State<GeneralSettingWidget> {
   void initState() {
     super.initState();
     generalSettings = [
-      GeneralSettingsClass(icon: Icons.person, title: 'My Account'),
+      GeneralSettingsClass(icon: Icons.person, title: 'My Account',
+      
+        navigation: () {
+          Navigator.of(
+            context,
+            rootNavigator: true,
+          ).pushNamed(AppRoutes.myAccountScreen);
+        },
+      ),
       GeneralSettingsClass(
         icon: Icons.list_outlined,
         title: 'My Orders',
