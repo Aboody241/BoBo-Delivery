@@ -6,7 +6,8 @@ import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:bobo/features/cart/models/cart_class.dart';
 import 'package:bobo/features/home/models/products_model.dart';
-import 'package:bobo/features/home/services/products_service.dart';
+import 'package:bobo/controller/product/cubit/product_cubit.dart';
+import 'package:bobo/controller/product/cubit/product_state.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,32 +23,26 @@ class HomeProductsList extends StatefulWidget {
 }
 
 class HomeProductsListState extends State<HomeProductsList> {
-  late Future<List<Product>> _productsFuture;
-
   @override
   void initState() {
     super.initState();
-    _productsFuture = getProducts();
+    // Load products on init if not loaded
+    context.read<ProductCubit>().loadProducts();
   }
 
   Future<void> refreshProducts() async {
-    // هنا بنعيد تحميل البيانات
-    setState(() {
-      _productsFuture = getProducts();
-    });
-    await _productsFuture;
+    await context.read<ProductCubit>().refreshProducts();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Product>>(
-      future: _productsFuture,
-      builder: (context, snapshot) {
-        final isLoading = snapshot.connectionState == ConnectionState.waiting;
+    return BlocBuilder<ProductCubit, ProductState>(
+      builder: (context, state) {
+        final isLoading = state is ProductLoading || state is ProductInitial;
 
-        if (snapshot.hasError) {
+        if (state is ProductError) {
           return SliverToBoxAdapter(
-            child: Center(child: Text('Error: ${snapshot.error}')),
+            child: Center(child: Text('Error: ${state.message}')),
           );
         }
 
@@ -64,16 +59,18 @@ class HomeProductsListState extends State<HomeProductsList> {
               id: '0',
             ),
           );
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        } else if (state is ProductLoaded && state.products.isEmpty) {
           return const SliverToBoxAdapter(
             child: Center(child: Text('No products found')),
           );
+        } else if (state is ProductLoaded) {
+          foods = state.products;
         } else {
-          foods = snapshot.data!;
+          foods = [];
         }
 
         return Skeletonizer.sliver(
-          enabled: snapshot.connectionState == ConnectionState.waiting,
+          enabled: isLoading,
           child: SliverGrid(
             delegate: SliverChildBuilderDelegate((context, index) {
               final food = foods[index];

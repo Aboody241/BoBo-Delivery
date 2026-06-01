@@ -1,3 +1,5 @@
+import 'package:bobo/controller/user/cubit/user_cubit.dart';
+import 'package:bobo/controller/user/models/user_model.dart';
 import 'package:bobo/core/consts/routes/routes.dart';
 import 'package:bobo/core/consts/widgets/button_style.dart';
 import 'package:bobo/core/consts/widgets/custom_appbar.dart';
@@ -6,9 +8,9 @@ import 'package:bobo/core/consts/widgets/custom_forms.dart';
 import 'package:bobo/core/consts/widgets/titled_text.dart';
 import 'package:bobo/features/profile/widgets/phone_form.dart';
 import 'package:bobo/features/profile/widgets/upload_profile.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 
@@ -98,18 +100,17 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                         try {
                           final user = FirebaseAuth.instance.currentUser;
                           if (user != null) {
-                            await FirebaseFirestore.instance
-                                .collection('users')
-                                .doc(user.uid)
-                                .set({
-                              'nem': nameController.text.trim(),
-                              'birthday': birthController.text.trim(),
-                              'address': addressController.text.trim(),
-                              'phone': phoneController.value != null
-                                  ? '+${phoneController.value!.countryCode} ${phoneController.value!.nsn}'
-                                  : '',
-                              'email': user.email ?? '',
-                            }, SetOptions(merge: true));
+                            final userModel = UserModel(
+                              uid: user.uid,
+                              name: nameController.text.trim(),
+                              email: user.email ?? '',
+                              phoneCode: phoneController.value.countryCode,
+                              phoneNumber: phoneController.value.nsn,
+                              birthday: birthController.text.trim(),
+                              address: addressController.text.trim(),
+                            );
+                            
+                            await context.read<UserCubit>().saveUser(userModel);
                           }
                           if (mounted) {
                             Navigator.pushNamedAndRemoveUntil(

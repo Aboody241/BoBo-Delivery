@@ -2,9 +2,11 @@ import 'package:bobo/core/consts/routes/routes.dart';
 import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:bobo/core/consts/widgets/custom_appbar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:bobo/controller/user/cubit/user_cubit.dart';
+import 'package:bobo/controller/user/cubit/user_state.dart';
+import 'package:bobo/controller/user/models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class MyAccountScreen extends StatefulWidget {
@@ -16,21 +18,18 @@ class MyAccountScreen extends StatefulWidget {
 
 class _MyAccountScreenState extends State<MyAccountScreen> {
   bool _isEditing = false;
-  bool _isLoading = true;
-
-  // Saved profile state
-  String _savedName = 'User';
-  String _savedEmail = 'user@example.com';
-  String _savedPhoneCode = '';
-  String _savedPhoneNum = '';
-  String _savedBirthday = '';
-  String _selectedAddressTitle = '';
+  bool _isSaving = false;
 
   // Text editing controllers
   late TextEditingController _nameController;
   late TextEditingController _phoneCodeController;
   late TextEditingController _phoneNumController;
   late TextEditingController _birthdayController;
+
+  String _selectedAddressTitle = '';
+  
+  // Keep track of the current user to initialize controllers
+  UserModel? _currentUser;
 
   @override
   void initState() {
@@ -39,7 +38,10 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
     _phoneCodeController = TextEditingController();
     _phoneNumController = TextEditingController();
     _birthdayController = TextEditingController();
-    _fetchUserData();
+    
+    // We expect the user to be loaded already by the global Cubit, 
+    // but just in case, we'll fetch again.
+    context.read<UserCubit>().fetchUser();
   }
 
   @override
@@ -51,263 +53,224 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
     super.dispose();
   }
 
-  Future<void> _fetchUserData() async {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        final doc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .get();
-
-        if (doc.exists) {
-          final data = doc.data() as Map<String, dynamic>;
-          setState(() {
-            _savedName = data['nem'] ?? data['name'] ?? 'User';
-            _savedEmail = data['email'] ?? user.email ?? 'user@example.com';
-
-            final rawPhone = data['phone'] ?? '';
-            if (rawPhone.startsWith('+')) {
-              final parts = rawPhone.substring(1).split(' ');
-              if (parts.length > 1) {
-                _savedPhoneCode = parts[0];
-                _savedPhoneNum = parts.sublist(1).join(' ');
-              } else {
-                _savedPhoneCode = '';
-                _savedPhoneNum = rawPhone;
-              }
-            } else if (rawPhone.contains('countryCode:')) {
-              final countryCodeMatch = RegExp(r'countryCode:\s*([0-9]+)').firstMatch(rawPhone);
-              final nsnMatch = RegExp(r'nsn:\s*([0-9]+)').firstMatch(rawPhone);
-              if (countryCodeMatch != null && nsnMatch != null) {
-                _savedPhoneCode = countryCodeMatch.group(1) ?? '';
-                _savedPhoneNum = nsnMatch.group(1) ?? '';
-              } else {
-                _savedPhoneCode = '';
-                _savedPhoneNum = rawPhone;
-              }
-            } else {
-              _savedPhoneCode = '';
-              _savedPhoneNum = rawPhone;
-            }
-
-            _savedBirthday = data['birthday'] ?? '';
-            _selectedAddressTitle = data['address'] ?? '';
-
-            // Update controllers
-            _nameController.text = _savedName;
-            _phoneCodeController.text = _savedPhoneCode;
-            _phoneNumController.text = _savedPhoneNum;
-            _birthdayController.text = _savedBirthday;
-            _isLoading = false;
-          });
-        } else {
-          setState(() {
-            _savedEmail = user.email ?? 'user@example.com';
-            _isLoading = false;
-          });
-        }
-      } else {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
+  void _initControllers(UserModel user) {
+    if (_currentUser == null || _currentUser!.uid != user.uid || !_isEditing) {
+      _nameController.text = user.name;
+      _phoneCodeController.text = user.phoneCode;
+      _phoneNumController.text = user.phoneNumber;
+      _birthdayController.text = user.birthday;
+      _selectedAddressTitle = user.address;
+      _currentUser = user;
     }
   }
 
   Future<void> _saveUserData() async {
+    if (_currentUser == null) return;
+    
     setState(() {
-      _isLoading = true;
+      _isSaving = true;
     });
 
     try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        final phoneStr = _phoneCodeController.text.isNotEmpty
-            ? '+${_phoneCodeController.text.replaceAll('+', '')} ${_phoneNumController.text}'
-            : _phoneNumController.text;
+      final updatedUser = _currentUser!.copyWith(
+        name: _nameController.text,
+        phoneCode: _phoneCodeController.text,
+        phoneNumber: _phoneNumController.text,
+        birthday: _birthdayController.text,
+        address: _selectedAddressTitle,
+      );
 
-        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-          'nem': _nameController.text,
-          'phone': phoneStr,
-          'birthday': _birthdayController.text,
-          'address': _selectedAddressTitle,
-          'email': _savedEmail,
-        }, SetOptions(merge: true));
+      await context.read<UserCubit>().saveUser(updatedUser);
 
+      if (mounted) {
         setState(() {
-          _savedName = _nameController.text;
-          _savedPhoneCode = _phoneCodeController.text;
-          _savedPhoneNum = _phoneNumController.text;
-          _savedBirthday = _birthdayController.text;
           _isEditing = false;
-          _isLoading = false;
+          _isSaving = false;
         });
       }
     } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to save: $e')),
-      );
+      if (mounted) {
+        setState(() {
+          _isSaving = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to save: $e')),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
-          child: CircularProgressIndicator(
-            color: AppColors.lightPrimary500,
-          ),
-        ),
-      );
-    }
+    return BlocConsumer<UserCubit, UserState>(
+      listener: (context, state) {
+        if (state is UserError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
+      builder: (context, state) {
+        if (state is UserLoading || state is UserInitial) {
+          return const Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: CircularProgressIndicator(
+                color: AppColors.lightPrimary500,
+              ),
+            ),
+          );
+        }
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: _isEditing
-          ? CancelSaveAppBar(
-              title: 'My Account',
-              onCancel: () {
-                setState(() {
-                  // Reset controller texts to saved state if cancelled
-                  _nameController.text = _savedName;
-                  _phoneCodeController.text = _savedPhoneCode;
-                  _phoneNumController.text = _savedPhoneNum;
-                  _birthdayController.text = _savedBirthday;
-                  _isEditing = false;
-                });
-              },
-              onSave: _saveUserData,
-            )
-          : AppBar(
-              backgroundColor: Colors.white,
-              elevation: 0,
-              scrolledUnderElevation: 0,
-              automaticallyImplyLeading: false,
-              leadingWidth: 100,
-              leading: TextButton.icon(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  color: Colors.black,
-                  size: 16,
-                ),
-                label: Text(
-                  'Back',
-                  style: AppTextStyle.poppins16Bold.copyWith(
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              centerTitle: true,
-              title: Text(
-                "My Account",
-                style: AppTextStyle.poppins20Bold.copyWith(
-                  color: AppColors.black,
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
+        if (state is UserLoaded) {
+          _initControllers(state.user);
+        }
+
+        return Scaffold(
+          backgroundColor: Colors.white,
+          appBar: _isEditing
+              ? CancelSaveAppBar(
+                  title: 'My Account',
+                  onCancel: () {
                     setState(() {
-                      _isEditing = true;
+                      if (_currentUser != null) {
+                        _nameController.text = _currentUser!.name;
+                        _phoneCodeController.text = _currentUser!.phoneCode;
+                        _phoneNumController.text = _currentUser!.phoneNumber;
+                        _birthdayController.text = _currentUser!.birthday;
+                        _selectedAddressTitle = _currentUser!.address;
+                      }
+                      _isEditing = false;
                     });
                   },
-                  child: Text(
-                    "Edit",
-                    style: AppTextStyle.poppins18Bold.copyWith(
-                      color: AppColors.lightPrimary500,
+                  onSave: _saveUserData,
+                )
+              : AppBar(
+                  backgroundColor: Colors.white,
+                  elevation: 0,
+                  scrolledUnderElevation: 0,
+                  automaticallyImplyLeading: false,
+                  leadingWidth: 100,
+                  leading: TextButton.icon(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      color: Colors.black,
+                      size: 16,
+                    ),
+                    label: Text(
+                      'Back',
+                      style: AppTextStyle.poppins16Bold.copyWith(
+                        color: Colors.black,
+                      ),
                     ),
                   ),
+                  centerTitle: true,
+                  title: Text(
+                    "My Account",
+                    style: AppTextStyle.poppins20Bold.copyWith(
+                      color: AppColors.black,
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _isEditing = true;
+                        });
+                      },
+                      child: Text(
+                        "Edit",
+                        style: AppTextStyle.poppins18Bold.copyWith(
+                          color: AppColors.lightPrimary500,
+                        ),
+                      ),
+                    ),
+                    const Gap(10),
+                  ],
                 ),
-                const Gap(10),
-              ],
-            ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Gap(25),
-            // Profile Picture
-            Center(
-              child: Stack(
-                children: [
-                  Container(
-                    width: 140,
-                    height: 140,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: const Color(0xFFECECEC),
-                        width: 2.5,
-                      ),
-                      image: const DecorationImage(
-                        image: NetworkImage(
-                          'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=256',
-                        ),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+          body: _isSaving 
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.lightPrimary500,
                   ),
-                  if (_isEditing)
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFF0F1EE),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.camera_alt_outlined,
-                          color: Colors.black54,
-                          size: 20,
+                )
+              : SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Gap(25),
+                      // Profile Picture
+                      Center(
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: 140,
+                              height: 140,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: const Color(0xFFECECEC),
+                                  width: 2.5,
+                                ),
+                                image: const DecorationImage(
+                                  image: NetworkImage(
+                                    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=256',
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            if (_isEditing)
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFFF0F1EE),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.camera_alt_outlined,
+                                    color: Colors.black54,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                       ),
-                    ),
-                ],
-              ),
-            ),
-            const Gap(25),
+                      const Gap(25),
 
-            // Toggle Editing View vs Readonly View
-            if (!_isEditing) ...[
-              // Readonly view
-              Text(
-                _savedName,
-                style: AppTextStyle.poppins24Bold.copyWith(
-                  color: Colors.black,
-                ),
-              ),
-              const Gap(4),
-              Text(
-                _savedEmail,
-                style: AppTextStyle.poppins14.copyWith(
-                  color: AppColors.darkGrey300,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const Gap(6),
-              Text(
-                _savedPhoneCode.isNotEmpty
-                    ? '+$_savedPhoneCode $_savedPhoneNum'
-                    : _savedPhoneNum,
-                style: AppTextStyle.poppins16Bold.copyWith(
-                  color: AppColors.darkGrey300,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const Gap(35),
+                      // Toggle Editing View vs Readonly View
+                      if (!_isEditing && _currentUser != null) ...[
+                        // Readonly view
+                        Text(
+                          _currentUser!.name,
+                          style: AppTextStyle.poppins24Bold.copyWith(
+                            color: Colors.black,
+                          ),
+                        ),
+                        const Gap(4),
+                        Text(
+                          _currentUser!.email,
+                          style: AppTextStyle.poppins14.copyWith(
+                            color: AppColors.darkGrey300,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const Gap(6),
+                        Text(
+                          _currentUser!.phoneCode.isNotEmpty
+                              ? '+${_currentUser!.phoneCode} ${_currentUser!.phoneNumber}'
+                              : _currentUser!.phoneNumber,
+                          style: AppTextStyle.poppins16Bold.copyWith(
+                            color: AppColors.darkGrey300,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const Gap(35),
 
               // Navigation Cards List
               _buildNavigationCard(
@@ -349,6 +312,59 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
             ],
             const Gap(30),
           ],
+        ),
+      ),
+    );
+    },
+  );
+  }
+
+  Widget _buildAddressSelectField() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
+      child: GestureDetector(
+        onTap: () async {
+          final result = await Navigator.pushNamed(
+            context,
+            AppRoutes.changeAddress,
+            arguments: _selectedAddressTitle,
+          );
+          if (result != null && result is Map<String, String>) {
+            setState(() {
+              _selectedAddressTitle = result['title']!;
+            });
+          }
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: const Color(0xFFECECEC),
+              width: 1.2,
+            ),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  _selectedAddressTitle.isNotEmpty
+                      ? 'Address - $_selectedAddressTitle'
+                      : 'Select Address',
+                  style: AppTextStyle.poppins16.copyWith(
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              const Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: AppColors.darkGrey400,
+                size: 16,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -463,56 +479,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
     );
   }
 
-  Widget _buildAddressSelectField() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
-      child: GestureDetector(
-        onTap: () async {
-          final result = await Navigator.pushNamed(
-            context,
-            AppRoutes.changeAddress,
-            arguments: _selectedAddressTitle,
-          );
-          if (result != null && result is Map<String, String>) {
-            setState(() {
-              _selectedAddressTitle = result['title']!;
-            });
-          }
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: const Color(0xFFECECEC),
-              width: 1.2,
-            ),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  _selectedAddressTitle.isNotEmpty
-                      ? 'Address - $_selectedAddressTitle'
-                      : 'Select Address',
-                  style: AppTextStyle.poppins16.copyWith(
-                    color: Colors.black87,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              const Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: AppColors.darkGrey400,
-                size: 16,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+
 
   Widget _buildNavigationCard({
     required String title,

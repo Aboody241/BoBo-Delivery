@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   awesome_dialog: ^3.3.0
+  bloc: ^9.2.1
   cached_network_image: ^3.4.1
   carousel_slider: ^5.1.2
   cloud_firestore: ^6.1.2
@@ -48,6 +49,7 @@ dependencies:
   google_fonts: ^6.3.2
   http: ^1.6.0
   icons_plus: ^5.0.0
+  meta: ^1.18.0
   overlay_support: ^2.1.0
   persistent_bottom_nav_bar: ^6.2.1
   phone_form_field: ^10.0.17

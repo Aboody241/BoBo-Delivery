@@ -1,5 +1,5 @@
 import 'package:bobo/core/components/not_found_screen.dart';
-import 'package:bobo/core/consts/pages/verfiy_OPT_NewAccount.dart';
+import 'package:bobo/features/auth/otp/verfiy_OPT_NewAccount.dart';
 import 'package:bobo/features/auth/forgetpassword/pages/verfieOPTpage.dart';
 import 'package:bobo/features/auth/login/pages/login_page_screen.dart';
 import 'package:bobo/features/auth/reset_password/pages/reset_password_screen.dart';
