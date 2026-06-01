@@ -1,3 +1,4 @@
+import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:flutter/material.dart';
 
@@ -24,18 +25,16 @@ class CategoriesCard extends StatelessWidget {
             ? Theme.of(context).colorScheme.primary.withOpacity(0.15)
             : Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Theme.of(context).dividerColor,
-        )
+        border: Border.all(color: AppColors.back),
       ),
       child: Center(
         child: Text(
           categoryName,
-          style:  AppTextStyle.poppins16.copyWith(
+          style: AppTextStyle.poppins16.copyWith(
             color: isSelected
                 ? Theme.of(context).colorScheme.onSurface
                 : Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-            fontWeight: isSelected? FontWeight.bold : null
+            fontWeight: isSelected ? FontWeight.bold : null,
           ),
           textAlign: TextAlign.center,
         ),
