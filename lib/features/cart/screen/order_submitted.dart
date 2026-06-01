@@ -3,8 +3,8 @@ import 'package:bobo/core/consts/widgets/custom_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class OrederSubmited extends StatelessWidget {
-  const OrederSubmited({super.key});
+class OrderSubmitted extends StatelessWidget {
+  const OrderSubmitted({super.key});
 
   @override
   Widget build(BuildContext context) {

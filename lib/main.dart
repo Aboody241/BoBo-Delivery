@@ -5,6 +5,8 @@ import 'package:bobo/controller/user/cubit/user_cubit.dart';
 import 'package:bobo/controller/user/repository/user_repository.dart';
 import 'package:bobo/controller/product/cubit/product_cubit.dart';
 import 'package:bobo/controller/product/repository/product_repository.dart';
+import 'package:bobo/controller/order/cubit/order_cubit.dart';
+import 'package:bobo/controller/order/repository/order_repository.dart';
 import 'package:bobo/core/consts/routes/routes.dart';
 import 'package:bobo/features/splash/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,6 +34,7 @@ void main() {
             BlocProvider(create: (context) => FavoriteCubit()),
             BlocProvider(create: (context) => UserCubit(UserRepository())..fetchUser()),
             BlocProvider(create: (context) => ProductCubit(productRepository: ProductRepository())..loadProducts()),
+            BlocProvider(create: (context) => OrderCubit(orderRepository: OrderRepository())),
           ],
           child: MyApp(),
         ),

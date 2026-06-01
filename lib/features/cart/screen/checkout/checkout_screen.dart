@@ -3,18 +3,22 @@ import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:bobo/controller/cart/cubit/cart_cubit.dart';
 import 'package:bobo/features/cart/models/cart_class.dart';
+import 'package:bobo/controller/order/cubit/order_cubit.dart';
+import 'package:bobo/controller/order/cubit/order_state.dart';
+import 'package:bobo/controller/order/models/order_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class ChickoutScreen extends StatefulWidget {
-  const ChickoutScreen({super.key});
+class CheckoutScreen extends StatefulWidget {
+  const CheckoutScreen({super.key});
 
   @override
-  State<ChickoutScreen> createState() => _ChickoutScreenState();
+  State<CheckoutScreen> createState() => _CheckoutScreenState();
 }
 
-class _ChickoutScreenState extends State<ChickoutScreen> {
+class _CheckoutScreenState extends State<CheckoutScreen> {
   String? _selectedCoupon;
   bool _isInitialized = false;
   Map<String, String> _selectedAddress = {
@@ -64,7 +68,20 @@ class _ChickoutScreenState extends State<ChickoutScreen> {
         double total = subtotal + deliveryCharges - discount;
         if (total < 0) total = 0;
 
-        return Scaffold(
+        return BlocConsumer<OrderCubit, OrderState>(
+          listener: (context, orderState) {
+            if (orderState is OrderPlaceSuccess) {
+              context.read<CartCubit>().clearCart();
+              Navigator.of(context, rootNavigator: true).pushReplacementNamed(AppRoutes.orderSubmitted);
+            } else if (orderState is OrderPlaceError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(orderState.message)),
+              );
+            }
+          },
+          builder: (context, orderState) {
+            final isPlacingOrder = orderState is OrderPlaceLoading;
+            return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
             backgroundColor: Colors.white,
@@ -347,13 +364,27 @@ class _ChickoutScreenState extends State<ChickoutScreen> {
                 Expanded(
                   flex: 5,
                   child: GestureDetector(
-                    onTap: () {
-                      context.read<CartCubit>().clearCart();
-                      Navigator.of(
-                        context,
-                        rootNavigator: true,
-                      ).pushNamed(AppRoutes.orderSubmited);
-                    },
+                    onTap: isPlacingOrder
+                        ? null
+                        : () {
+                            if (cartItems.isEmpty) return;
+                            final userId = FirebaseAuth.instance.currentUser?.uid ?? 'guest';
+                            final order = OrderModel(
+                              orderId: '',
+                              userId: userId,
+                              items: cartItems.map((c) => OrderItem(
+                                productId: c.id,
+                                name: c.title,
+                                price: c.price.toString(),
+                                quantity: c.quantity.toString(),
+                                imageUrl: c.imageUrl,
+                              )).toList(),
+                              total: total.toStringAsFixed(2),
+                              status: 'pending',
+                              createdAt: DateTime.now(),
+                            );
+                            context.read<OrderCubit>().placeOrder(order);
+                          },
                     child: Container(
                       height: 56,
                       decoration: BoxDecoration(
@@ -361,12 +392,14 @@ class _ChickoutScreenState extends State<ChickoutScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Center(
-                        child: Text(
-                          'Place order',
-                          style: AppTextStyle.poppins16Bold.copyWith(
-                            color: Colors.white,
-                          ),
-                        ),
+                        child: isPlacingOrder
+                            ? const CircularProgressIndicator(color: Colors.white)
+                            : Text(
+                                'Place order',
+                                style: AppTextStyle.poppins16Bold.copyWith(
+                                  color: Colors.white,
+                                ),
+                              ),
                       ),
                     ),
                   ),
@@ -374,6 +407,8 @@ class _ChickoutScreenState extends State<ChickoutScreen> {
               ],
             ),
           ),
+        );
+          },
         );
       },
     );

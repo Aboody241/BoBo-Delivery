@@ -116,7 +116,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                             onPressed: () {
                               Navigator.pushNamed(
                                 context,
-                                AppRoutes.verfiyOTPScreen,
+                                AppRoutes.verifyOtpScreen,
                               );
                             },
                             child: Text(

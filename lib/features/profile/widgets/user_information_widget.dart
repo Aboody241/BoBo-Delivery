@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:bobo/controller/user/cubit/user_cubit.dart';
@@ -5,6 +6,7 @@ import 'package:bobo/controller/user/cubit/user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UserInformationWidget extends StatelessWidget {
   const UserInformationWidget({super.key});
@@ -22,23 +24,61 @@ class UserInformationWidget extends StatelessWidget {
 
         String userName = 'User';
         String userEmail = 'user@example.com';
+        String? imagePath;
         
         if (state is UserLoaded) {
           userName = state.user.name;
           userEmail = state.user.email;
+          imagePath = state.localImagePath;
         }
 
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadiusGeometry.circular(1000),
-                child: Image.asset(
-                  'assets/consts/avataar.jpeg',
-                  fit: BoxFit.fill,
-                  width: 100,
-                  height: 100,
+              GestureDetector(
+                onTap: () async {
+                  final picker = ImagePicker();
+                  final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+                  if (pickedFile != null && context.mounted) {
+                    context.read<UserCubit>().updateProfileImage(File(pickedFile.path));
+                  }
+                },
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(1000),
+                      child: imagePath != null
+                          ? Image.file(
+                              File(imagePath),
+                              fit: BoxFit.cover,
+                              width: 100,
+                              height: 100,
+                            )
+                          : Image.asset(
+                              'assets/consts/avataar.jpeg',
+                              fit: BoxFit.cover,
+                              width: 100,
+                              height: 100,
+                            ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: const BoxDecoration(
+                          color: AppColors.lightPrimary500,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.camera_alt,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const Gap(20),

@@ -10,8 +10,9 @@ final class UserLoading extends UserState {}
 
 final class UserLoaded extends UserState {
   final UserModel user;
+  final String? localImagePath;
 
-  UserLoaded(this.user);
+  UserLoaded(this.user, {this.localImagePath});
 }
 
 final class UserError extends UserState {

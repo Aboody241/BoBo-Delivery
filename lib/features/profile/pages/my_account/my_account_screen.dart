@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:bobo/core/consts/routes/routes.dart';
 import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
@@ -8,6 +9,7 @@ import 'package:bobo/controller/user/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MyAccountScreen extends StatefulWidget {
   const MyAccountScreen({super.key});
@@ -122,8 +124,10 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
           );
         }
 
+        String? imagePath;
         if (state is UserLoaded) {
           _initControllers(state.user);
+          imagePath = state.localImagePath;
         }
 
         return Scaffold(
@@ -202,43 +206,57 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                       const Gap(25),
                       // Profile Picture
                       Center(
-                        child: Stack(
-                          children: [
-                            Container(
-                              width: 140,
-                              height: 140,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: const Color(0xFFECECEC),
-                                  width: 2.5,
-                                ),
-                                image: const DecorationImage(
-                                  image: NetworkImage(
-                                    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=256',
+                        child: GestureDetector(
+                          onTap: _isEditing ? () async {
+                            final picker = ImagePicker();
+                            final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+                            if (pickedFile != null && context.mounted) {
+                              context.read<UserCubit>().updateProfileImage(File(pickedFile.path));
+                            }
+                          } : null,
+                          child: Stack(
+                            children: [
+                              Container(
+                                width: 140,
+                                height: 140,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: const Color(0xFFECECEC),
+                                    width: 2.5,
                                   ),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            if (_isEditing)
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xFFF0F1EE),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(
-                                    Icons.camera_alt_outlined,
-                                    color: Colors.black54,
-                                    size: 20,
-                                  ),
+                                  image: imagePath != null
+                                      ? DecorationImage(
+                                          image: FileImage(File(imagePath)),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : const DecorationImage(
+                                          image: NetworkImage(
+                                            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=256',
+                                          ),
+                                          fit: BoxFit.cover,
+                                        ),
                                 ),
                               ),
-                          ],
+                              if (_isEditing)
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xFFF0F1EE),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(
+                                      Icons.camera_alt_outlined,
+                                      color: Colors.black54,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
                         ),
                       ),
                       const Gap(25),

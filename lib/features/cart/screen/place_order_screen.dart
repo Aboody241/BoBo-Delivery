@@ -332,7 +332,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                               context,
                               rootNavigator: true,
                             ).pushNamed(
-                              AppRoutes.chickoutScreen,
+                              AppRoutes.checkoutScreen,
                               arguments: _selectedCoupon,
                             );
                           },

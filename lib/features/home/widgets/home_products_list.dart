@@ -55,7 +55,7 @@ class HomeProductsListState extends State<HomeProductsList> {
               price: 0.0,
               image: 'https://via.placeholder.com/150',
               rate: 0.0,
-              disc: 'no Discription',
+              disc: 'no Description',
               id: '0',
             ),
           );

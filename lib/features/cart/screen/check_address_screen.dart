@@ -43,7 +43,7 @@ class CheckAddressScreen extends StatelessWidget {
                   Navigator.of(
                         context,
                         rootNavigator: true,
-                      ).pushNamed(AppRoutes.orderSubmited);
+                      ).pushNamed(AppRoutes.orderSubmitted);
                 },
                 hei: 60,
               ),

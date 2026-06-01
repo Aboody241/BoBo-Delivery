@@ -1,22 +1,22 @@
 import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
+import 'package:bobo/core/consts/widgets/button_style.dart';
 import 'package:bobo/core/consts/widgets/custom_appbar.dart';
 import 'package:bobo/core/consts/widgets/custom_buttons.dart';
 import 'package:bobo/core/consts/widgets/titled_text.dart';
-import 'package:bobo/features/profile/pages/create_profile_screen.dart';
+import 'package:bobo/features/auth/reset_password/pages/reset_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:gap/gap.dart';
 
-class VerfiyOTPNewAccountScreen extends StatefulWidget {
-  const VerfiyOTPNewAccountScreen({super.key});
+class VerifyOtpScreen extends StatefulWidget {
+  const VerifyOtpScreen({super.key});
 
   @override
-  State<VerfiyOTPNewAccountScreen> createState() =>
-      _VerfiyOTPNewAccountScreenState();
+  State<VerifyOtpScreen> createState() => _VerifyOtpScreenState();
 }
 
-class _VerfiyOTPNewAccountScreenState extends State<VerfiyOTPNewAccountScreen> {
+class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
   void _showSuccesDialog() {
     showDialog(
       context: context,
@@ -32,13 +32,16 @@ class _VerfiyOTPNewAccountScreenState extends State<VerfiyOTPNewAccountScreen> {
               Icon(
                 Icons.check_circle_rounded,
                 color: AppColors.darkGradientLight,
-                size: 50,
+                size: 70,
               ),
               const SizedBox(height: 15),
-              Text('Success Process', style: AppTextStyle.poppins16),
+              const Text(
+                'Success Process',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
               const SizedBox(height: 8),
               const Text(
-                'You Account Created, Now Init Your Profile',
+                'Now you can change your password',
                 textAlign: TextAlign.center,
               ),
             ],
@@ -53,7 +56,7 @@ class _VerfiyOTPNewAccountScreenState extends State<VerfiyOTPNewAccountScreen> {
       Navigator.of(context).pop();
 
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const CreateProfileScreen()),
+        MaterialPageRoute(builder: (context) => const ResetPasswordScreen()),
       );
     });
   }
@@ -73,7 +76,7 @@ class _VerfiyOTPNewAccountScreenState extends State<VerfiyOTPNewAccountScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const TitledText(title: 'Verfiy OPT Code'),
+            const TitledText(title: 'Verify OTP Code'),
             const Gap(12),
             Text(
               'Enter the verification code sent to your email sample@example.com',
@@ -122,7 +125,7 @@ class _VerfiyOTPNewAccountScreenState extends State<VerfiyOTPNewAccountScreen> {
             EnabledButton(
               onPressed: isOtpComplete ? _showSuccesDialog : null,
               hei: 55,
-              child: Text('Verfiy'),
+              child: Text('Verify' , style: ButtonTextStyle.button,),
             ),
 
             const Gap(50),

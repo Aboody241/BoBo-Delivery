@@ -1,7 +1,12 @@
 import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:bobo/core/consts/widgets/custom_appbar.dart';
+import 'package:bobo/controller/order/cubit/order_cubit.dart';
+import 'package:bobo/controller/order/cubit/order_state.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:gap/gap.dart';
 
 class MyOrdersScreen extends StatefulWidget {
@@ -12,6 +17,13 @@ class MyOrdersScreen extends StatefulWidget {
 }
 
 class _MyOrdersScreenState extends State<MyOrdersScreen> {
+  @override
+  void initState() {
+    super.initState();
+    final userId = FirebaseAuth.instance.currentUser?.uid ?? 'guest';
+    context.read<OrderCubit>().fetchUserOrders(userId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -135,121 +147,122 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
   }
 
   Widget _buildPreviousOrdersTab(BuildContext context) {
-    final List<Map<String, dynamic>> pastOrders = [
-      {
-        'title': 'Order delivered',
-        'date': '26 October',
-        'price': 16.98,
-        'summary': 'Pudding x1',
-        'image': 'assets/products/o_pizza.png',
-      },
-      {
-        'title': 'Order delivered',
-        'date': '18 October',
-        'price': 12.50,
-        'summary': 'Classic Burger x1',
-        'image': 'assets/products/burger_test.png',
-      },
-      {
-        'title': 'Order delivered',
-        'date': '18 October',
-        'price': 12.50,
-        'summary': 'Classic Burger x1',
-        'image': 'assets/products/burger_test.png',
-      },
-    ];
+    return BlocBuilder<OrderCubit, OrderState>(
+      builder: (context, state) {
+        if (state is OrderLoading || state is OrderInitial) {
+          return const Center(child: CircularProgressIndicator(color: AppColors.lightPrimary500));
+        } else if (state is OrderError) {
+          return Center(child: Text('Error: ${state.message}'));
+        } else if (state is OrderLoaded) {
+          final pastOrders = state.orders;
 
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      itemCount: pastOrders.length,
-      itemBuilder: (context, index) {
-        final order = pastOrders[index];
-        return Container(
-          margin: EdgeInsets.only(bottom: 20),
-          child: Column(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(18),
-                    child: Image.asset(
-                      order['image'],
-                      width: 90,
-                      height: 90,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const Gap(15),
-                  Expanded(
-                    child: Column(
+          if (pastOrders.isEmpty) {
+            return Center(
+              child: Text(
+                'No previous orders found',
+                style: AppTextStyle.poppins16Bold.copyWith(color: AppColors.darkGrey400),
+              ),
+            );
+          }
+
+          return ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            itemCount: pastOrders.length,
+            itemBuilder: (context, index) {
+              final order = pastOrders[index];
+              final orderDate = DateFormat('dd MMMM').format(order.createdAt);
+              final totalPrice = double.tryParse(order.total) ?? 0.0;
+              final summary = order.items.map((i) => '${i.name} x${i.quantity}').join(', ');
+              final imageUrl = order.items.isNotEmpty ? order.items.first.imageUrl : 'assets/products/o_pizza.png';
+
+              return Container(
+                margin: const EdgeInsets.only(bottom: 20),
+                child: Column(
+                  children: [
+                    Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          order['title'],
-                          style: AppTextStyle.poppins18Bold.copyWith(
-                            color: const Color(0xFF2E3E5C),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(18),
+                          child: imageUrl.startsWith('http') 
+                             ? Image.network(imageUrl, width: 90, height: 90, fit: BoxFit.cover)
+                             : Image.asset(imageUrl, width: 90, height: 90, fit: BoxFit.cover),
+                        ),
+                        const Gap(15),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Order ${order.status}',
+                                style: AppTextStyle.poppins18Bold.copyWith(
+                                  color: const Color(0xFF2E3E5C),
+                                ),
+                              ),
+                              const Gap(6),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Delivered on',
+                                    style: AppTextStyle.poppins14.copyWith(
+                                      color: const Color(0xFF7F8E9C),
+                                    ),
+                                  ),
+                                  const Gap(8),
+                                  Text(
+                                    orderDate,
+                                    style: AppTextStyle.poppins14Bold.copyWith(
+                                      color: const Color(0xFF2E3E5C),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Gap(4),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Order summary',
+                                    style: AppTextStyle.poppins14.copyWith(
+                                      color: const Color(0xFF7F8E9C),
+                                    ),
+                                  ),
+                                  const Gap(8),
+                                  Expanded(
+                                    child: Text(
+                                      summary,
+                                      style: AppTextStyle.poppins14Bold.copyWith(
+                                        color: const Color(0xFF2E3E5C),
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Gap(4),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Total price paid',
+                                    style: AppTextStyle.poppins14.copyWith(
+                                      color: const Color(0xFF7F8E9C),
+                                    ),
+                                  ),
+                                  const Gap(8),
+                                  Text(
+                                    '\$${totalPrice.toStringAsFixed(2)}',
+                                    style: AppTextStyle.poppins14Bold.copyWith(
+                                      color: const Color(0xFF2E3E5C),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ),
-                        const Gap(6),
-                        Row(
-                          children: [
-                            Text(
-                              'Delivered on',
-                              style: AppTextStyle.poppins14.copyWith(
-                                color: const Color(0xFF7F8E9C),
-                              ),
-                            ),
-                            const Gap(8),
-                            Text(
-                              order['date'],
-                              style: AppTextStyle.poppins14Bold.copyWith(
-                                color: const Color(0xFF2E3E5C),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Gap(4),
-                        Row(
-                          children: [
-                            Text(
-                              'Order summary',
-                              style: AppTextStyle.poppins14.copyWith(
-                                color: const Color(0xFF7F8E9C),
-                              ),
-                            ),
-                            const Gap(8),
-                            Text(
-                              order['summary'],
-                              style: AppTextStyle.poppins14Bold.copyWith(
-                                color: const Color(0xFF2E3E5C),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Gap(4),
-                        Row(
-                          children: [
-                            Text(
-                              'Total price paid',
-                              style: AppTextStyle.poppins14.copyWith(
-                                color: const Color(0xFF7F8E9C),
-                              ),
-                            ),
-                            const Gap(8),
-                            Text(
-                              '\$${order['price'].toStringAsFixed(2)}',
-                              style: AppTextStyle.poppins14Bold.copyWith(
-                                color: const Color(0xFF2E3E5C),
-                              ),
-                            ),
-                          ],
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
               const Gap(15),
               Row(
                 children: [
@@ -259,7 +272,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
-                              'Reordered ${order['summary']} successfully!',
+                              'Reordered ${summary} successfully!',
                             ),
                             backgroundColor: AppColors.lightPrimary600,
                           ),
@@ -314,6 +327,10 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
             ],
           ),
         );
+      },
+    );
+        }
+        return const SizedBox.shrink();
       },
     );
   }

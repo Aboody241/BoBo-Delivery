@@ -40,10 +40,42 @@ class _GeneralSettingWidgetState extends State<GeneralSettingWidget> {
           ).pushNamed(AppRoutes.myOrdersScreen);
         },
       ),
-      GeneralSettingsClass(icon: Icons.payment_rounded, title: 'Payments'),
-      GeneralSettingsClass(icon: Icons.place_outlined, title: 'Addresses'),
-      GeneralSettingsClass(icon: Icons.auto_awesome, title: 'Subscription'),
-      GeneralSettingsClass(icon: Icons.settings, title: 'Settings'),
+      GeneralSettingsClass(
+        icon: Icons.payment_rounded,
+        title: 'Payments',
+        navigation: () {
+          Navigator.of(context, rootNavigator: true)
+              .pushNamed(AppRoutes.paymentMethods);
+        },
+      ),
+      GeneralSettingsClass(
+        icon: Icons.place_outlined,
+        title: 'Addresses',
+        navigation: () {
+          Navigator.of(context, rootNavigator: true)
+              .pushNamed(AppRoutes.addresses);
+        },
+      ),
+      GeneralSettingsClass(
+        icon: Icons.auto_awesome,
+        title: 'Subscription',
+        navigation: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Subscription feature is coming soon!'),
+              backgroundColor: AppColors.lightPrimary500,
+            ),
+          );
+        },
+      ),
+      GeneralSettingsClass(
+        icon: Icons.settings,
+        title: 'Settings',
+        navigation: () {
+          Navigator.of(context, rootNavigator: true)
+              .pushNamed(AppRoutes.settings);
+        },
+      ),
       GeneralSettingsClass(
         icon: Icons.logout_rounded,
         title: 'Logout',

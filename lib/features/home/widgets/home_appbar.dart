@@ -1,7 +1,8 @@
 import 'package:bobo/core/consts/routes/routes.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
-import 'package:bobo/services/firebase/auth_service.dart';
+// import 'package:bobo/services/firebase/auth_service.dart';
 import 'package:bobo/controller/user/cubit/user_cubit.dart';
+import 'dart:io';
 import 'package:bobo/controller/user/cubit/user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,8 +26,10 @@ class HomeAppbar extends StatelessWidget {
           }
 
           String userName = 'User';
+          String? imagePath;
           if (state is UserLoaded) {
             userName = state.user.name;
+            imagePath = state.localImagePath;
           }
 
           return Row(
@@ -45,18 +48,15 @@ class HomeAppbar extends StatelessWidget {
                 ],
               ),
               InkWell(
-                onTap: () async {
-                  await AuthService().logout();
-                  if (!context.mounted) return;
-                  Navigator.of(
-                    context,
-                    rootNavigator: true,
-                  ).pushReplacementNamed(AppRoutes.onBoardingAuth);
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true)
+                      .pushNamed(AppRoutes.userProfileScreen);
                 },
-                child: const CircleAvatar(
+                child: CircleAvatar(
                   maxRadius: 25,
                   backgroundColor: Colors.blueAccent,
-                  child: Icon(Icons.person, color: Colors.white, size: 28),
+                  backgroundImage: imagePath != null ? FileImage(File(imagePath)) : null,
+                  child: imagePath == null ? const Icon(Icons.person, color: Colors.white, size: 28) : null,
                 ),
               ),
             ],

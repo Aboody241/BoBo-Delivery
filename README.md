@@ -1,105 +1,111 @@
-# 🛵 BoBo Delivery App
+<h1 align="center">
+  🍔 BoBo Delivery App
+</h1>
 
-[![Flutter Version](https://img.shields.io/badge/Flutter-%5E3.10.0-blue?logo=flutter)](https://flutter.dev)
-[![Firebase](https://img.shields.io/badge/Backend-Firebase-orange?logo=firebase)](https://firebase.google.com)
-[![State Management](https://img.shields.io/badge/State--Management-Bloc%2FCubit-green?logo=bloc)](https://bloclibrary.dev)
-[![License](https://img.shields.io/badge/License-None-red)](#)
+<p align="center">
+  A modern, full-stack E-Commerce & Food Delivery application built with Flutter and Firebase.
+  <br>
+  Designed to demonstrate clean architecture, robust state management, and real-time database integrations.
+</p>
 
-تطبيق **BoBo Delivery** هو منصة تجارة إلكترونية وتوصيل متكاملة وحديثة لطلب الأطعمة والمأكولات، مبني بأحدث تقنيات **Flutter** للواجهات، وبنية هندسية متطورة وسريعة الاستجابة تعتمد على منصة **Firebase** كخادم خلفي متكامل لإدارة المستخدمين وقواعد البيانات.
-
----
-
-## 🏗️ البنية الهندسية للمشروع (Architecture)
-
-يتبع التطبيق نمط **Feature-First Architecture** الموصى به للمشاريع الاحترافية لضمان قابلية التوسع (Scalability) وسهولة الصيانة والعمل الجماعي.
-
-### هيكل المجلدات الرئيسي:
-```
-lib/
-├── controller/         # إدارة الحالات المشتركة (Cart, Favorite) باستخدام Cubit
-├── core/               # المكونات الأساسية المشتركة (ثيم الألوان، الخطوط، الأكواد العامة)
-│   ├── components/     # الشاشات العامة المشتركة (مثل شاشة 404)
-│   ├── consts/         # تعريفات المسارات والثوابت والويدجت المشتركة
-│   └── widgets/        # حقول الإدخال والأزرار وقوائم التوجيه العامة
-├── features/           # الميزات المستقلة والواجهات الخاصة بكل ميزة
-│   ├── auth/           # توثيق المستخدمين (تسجيل الدخول، إنشاء الحساب، استعادة كلمة المرور)
-│   ├── cart/           # سلة المشتريات وشاشات الدفع وتأكيد العنوان
-│   ├── discover_page/  # شاشة البحث وتصفح الأقسام والتصنيفات ديناميكياً
-│   ├── favorate/       # شاشة إدارة المنتجات المفضلة للمستخدم
-│   ├── home/           # الشاشة الرئيسية وجلب المنتجات والسلايدر الإعلاني
-│   ├── my_orders/      # متابعة وعرض الطلبات السابقة للمستخدم
-│   ├── on_board/       # واجهات التعريف والترحيب بالتطبيق
-│   ├── products_details/# شاشة تفاصيل المنتج، حساب السعرات والكميات
-│   └── splash/         # شاشة بدء التشغيل الترحيبية للتطبيق
-└── services/           # الخدمات الخلفية للاتصال بقواعد البيانات (Auth, Firestore)
-```
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#architecture">Architecture</a> •
+  <a href="#tech-stack">Tech Stack</a> •
+  <a href="#getting-started">Getting Started</a>
+</p>
 
 ---
 
-## 🛠️ التقنيات والمكتبات المستخدمة (Tech Stack)
+## 📱 Screenshots
+*(Add your screenshots here to impress recruiters!)*
 
-* **UI & Core:** Flutter SDK (Dart 3) مع دعم كامل للـ Material 3 والتصميم المتجاوب بـ `flutter_screenutil`.
-* **State Management:** `flutter_bloc` لإدارة حالة السلة والمفضلة عبر الـ `Cubit`.
-* **Backend Services:** 
-  * **Firebase Core:** لتهيئة الاتصال مع الخدمات.
-  * **Firebase Auth:** لتسجيل المستخدمين بالبريد وإدارة الحسابات بشكل آمن.
-  * **Cloud Firestore:** قاعدة بيانات سحابية لحظية لجلب وتحديث المنتجات والتصنيفات ديناميكياً.
-* **Performance & Loading:**
-  * **Skeletonizer:** لإنتاج تأثيرات تحميل هيكلية غاية في الروعة أثناء جلب البيانات.
-  * **CachedNetworkImage:** لإدارة كاش الصور ديناميكياً وتقليص استهلاك الذاكرة العشوائية (RAM) وحجم البيانات المستهلكة.
-  * **Rive:** لدعم الحركات التفاعلية فائقة الجودة.
+<p align="center">
+  <img src="https://via.placeholder.com/250x500.png?text=Home+Screen" width="22%" />
+  <img src="https://via.placeholder.com/250x500.png?text=Product+Details" width="22%" />
+  <img src="https://via.placeholder.com/250x500.png?text=Cart+&+Checkout" width="22%" />
+  <img src="https://via.placeholder.com/250x500.png?text=My+Orders" width="22%" />
+</p>
 
 ---
 
-## ✨ المميزات الرئيسية للتطبيق (Features)
+## ✨ Features
 
-1. **نظام توثيق وحماية متكامل (Firebase Auth Flow):** تسجيل حسابات جديدة، الدخول، وتجربة التطبيق كزائر (Guest Mode).
-2. **شاشة رئيسية ديناميكية تفاعلية:** سحب لتحديث البيانات (Pull to Refresh)، سلايدر متحرك، وقائمة منتجات مدمجة بـ Skeleton Loading.
-3. **نظام سلة متطور (Cart Cubit):** إضافة وتعديل الكميات ديناميكياً، واجهات سلة فارغة جذابة، وحساب تلقائي لحظي للأسعار.
-4. **مفضلة تفاعلية بحركات جذابة:** إضافة وحذف المنتجات بتأثيرات حركية مطاطية (Elastic Transitions) متناسقة عبر شاشات التطبيق.
-5. **شاشة تفاصيل تفصيلية:** عرض السعرات الحرارية، مدة التوصيل، التقييم، مع وصف للمنتج قابل للتمدد (Read More / See Less).
-6. **دعم كامل للوضعين المظلم والمضيء (ThemeMode.system):** واجهات مخصصة للـ Dark Mode والـ Light Mode لتوفير أفضل تجربة قراءة وحماية للعين.
-
----
-
-## 🔍 تقرير الفحص والتدقيق الفني الشامل (Technical Deep Audit)
-
-خضع هذا المشروع لتدقيق برمجي مكثف من قبل **Lead QA & Architecture Engineer**، وتم رصد كافة الثغرات المنطقية والأخطاء البرمجية (مثل الأزرار المعطلة، مشاكل الـ Async، والتنبيهات البرمجية) ووضع خارطة طريق واضحة لحلها.
-
-يمكنك مراجعة تقرير التدقيق الفني الشامل وجاهزية التطبيق للعمل الفعلي من خلال الرابط التالي:
-📄 **[تقرير الفحص البرمجي والهندسي الشامل لـ BoBo Delivery](.system_generated/../project_analysis_report.md)** *(أو افتح الملف `.system_generated/../flutter_project_deep_audit.md` داخل مجلدات الـ Brain للمشروع)*.
+- **🔐 Authentication System:** Secure email/password login, account creation, and OTP verification flow using Firebase Auth.
+- **🛒 Real-time Products:** Fetches dynamic product data from Cloud Firestore. Includes Skeleton loading screens for a premium UI feel.
+- **🛍️ Cart & Checkout:** Add/remove items, apply coupons, and calculate total prices dynamically.
+- **📦 Order Management:** Real-world checkout logic. Orders are securely saved to Firestore and linked to the user's account (`userId`).
+- **🧾 Order History (My Orders):** Users can view their past orders, total price paid, delivery dates, and product summaries fetched directly from the backend.
+- **❤️ Favorites System:** Save and remove favorite items with smooth elastic animations.
+- **🌗 Dark / Light Mode:** Full support for system-based theme switching.
 
 ---
 
-## 🚀 كيفية البدء والتشغيل (Getting Started)
+## 🏗️ Architecture & State Management
 
-### المتطلبات الأساسية:
-* تأكد من تثبيت **Flutter SDK** (الإصدار `>= 3.10.0`).
-* تأكد من إعداد بيئة التطوير الخاصة بك (Android Studio / VS Code).
+This project strictly follows **Clean Architecture principles** combined with a Feature-First folder structure to ensure high scalability and testability.
 
-### خطوات التشغيل:
+### 🧩 Repository Pattern
+The application separates the UI from data fetching logic. We use dedicated Repositories to interact with Firebase:
+- `ProductRepository`: Handles fetching products.
+- `OrderRepository`: Manages placing new orders and fetching user-specific order history.
+- `UserRepository`: Manages user data reads/writes.
 
-1. **تحميل المشروع (Clone the Repository):**
+### 🔄 State Management (Cubit/BLoC)
+State is managed centrally using **Cubit** (from `flutter_bloc`), ensuring the UI only rebuilds when necessary and eliminating spaghetti code:
+- `OrderCubit`: Manages the loading, success, and error states of order placement and retrieval.
+- `ProductCubit`: Handles the lifecycle of fetching products.
+- `CartCubit` & `FavoriteCubit`: Manages local cart and wishlist states across the entire application.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework:** [Flutter](https://flutter.dev/) (Dart 3+)
+- **Backend as a Service:** [Firebase](https://firebase.google.com/)
+  - **Firebase Auth:** User Identity & Security.
+  - **Cloud Firestore:** NoSQL Real-time Database.
+- **State Management:** `flutter_bloc` (Cubit)
+- **UI Enhancements:**
+  - `skeletonizer` (For loading effects)
+  - `cached_network_image` (Image caching)
+  - `flutter_screenutil` (Responsive design)
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Flutter SDK `>=3.10.0`
+- Android Studio / VS Code
+- A Firebase Project
+
+### Installation
+
+1. **Clone the repository:**
    ```bash
    git clone https://github.com/Aboody241/BoBo-Delivery.git
    cd BoBo-Delivery
    ```
 
-2. **تحميل المكتبات والاعتمادات (Install Dependencies):**
+2. **Install Dependencies:**
    ```bash
    flutter pub get
    ```
 
-3. **إعداد Firebase:**
-   * قم بإنشاء مشروع جديد في [منصة Firebase](https://console.firebase.google.com).
-   * أضف تطبيقي Android و iOS لمشروعك.
-   * قم بتحميل ملفات الإعداد (`google-services.json` للـ Android و `GoogleService-Info.plist` للـ iOS) ووضعها في مجلدات المنصات المخصصة لها، أو استخدم أداة `FlutterFire CLI` لإنشاء ملف `firebase_options.dart` تلقائياً.
+3. **Firebase Setup:**
+   - Go to the [Firebase Console](https://console.firebase.google.com/).
+   - Create a new project and enable **Authentication** (Email/Password) and **Firestore**.
+   - Set up your Firestore database rules.
+   - Run `flutterfire configure` in the terminal to automatically connect the app to your Firebase project.
 
-4. **تشغيل التطبيق (Run the Application):**
+4. **Run the App:**
    ```bash
    flutter run
    ```
 
 ---
 
-*تطبيق BoBo Delivery يمثل نموذجاً برمجياً ممتازاً وقابلاً للتطوير ليكون منصة متكاملة وناجحة في سوق تطبيقات التوصيل الحديثة.*
+<p align="center">
+  <i>Developed with ❤️ for Portfolio Demonstration.</i>
+</p>
