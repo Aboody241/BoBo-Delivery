@@ -28,7 +28,7 @@ class HomeAppbar extends StatelessWidget {
           }
 
           final userData = snapshot.data?.data() as Map<String, dynamic>? ?? {};
-          final userName = userData['name'] ?? 'User';
+          final userName = userData['nem'] ?? userData['name'] ?? 'User';
 
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

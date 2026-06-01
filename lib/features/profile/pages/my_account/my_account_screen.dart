@@ -2,6 +2,8 @@ import 'package:bobo/core/consts/routes/routes.dart';
 import 'package:bobo/core/consts/theme/colors.dart';
 import 'package:bobo/core/consts/theme/fonts.dart';
 import 'package:bobo/core/consts/widgets/custom_appbar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -14,13 +16,15 @@ class MyAccountScreen extends StatefulWidget {
 
 class _MyAccountScreenState extends State<MyAccountScreen> {
   bool _isEditing = false;
+  bool _isLoading = true;
 
   // Saved profile state
-  String _savedName = 'Daniel Jones';
-  String _savedPhoneCode = '405';
-  String _savedPhoneNum = '555-0128';
-  String _savedBirthday = '12-10-1996';
-  String _selectedAddressTitle = 'Home';
+  String _savedName = 'User';
+  String _savedEmail = 'user@example.com';
+  String _savedPhoneCode = '';
+  String _savedPhoneNum = '';
+  String _savedBirthday = '';
+  String _selectedAddressTitle = '';
 
   // Text editing controllers
   late TextEditingController _nameController;
@@ -31,10 +35,11 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: _savedName);
-    _phoneCodeController = TextEditingController(text: _savedPhoneCode);
-    _phoneNumController = TextEditingController(text: _savedPhoneNum);
-    _birthdayController = TextEditingController(text: _savedBirthday);
+    _nameController = TextEditingController();
+    _phoneCodeController = TextEditingController();
+    _phoneNumController = TextEditingController();
+    _birthdayController = TextEditingController();
+    _fetchUserData();
   }
 
   @override
@@ -46,8 +51,126 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
     super.dispose();
   }
 
+  Future<void> _fetchUserData() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final doc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        if (doc.exists) {
+          final data = doc.data() as Map<String, dynamic>;
+          setState(() {
+            _savedName = data['nem'] ?? data['name'] ?? 'User';
+            _savedEmail = data['email'] ?? user.email ?? 'user@example.com';
+
+            final rawPhone = data['phone'] ?? '';
+            if (rawPhone.startsWith('+')) {
+              final parts = rawPhone.substring(1).split(' ');
+              if (parts.length > 1) {
+                _savedPhoneCode = parts[0];
+                _savedPhoneNum = parts.sublist(1).join(' ');
+              } else {
+                _savedPhoneCode = '';
+                _savedPhoneNum = rawPhone;
+              }
+            } else if (rawPhone.contains('countryCode:')) {
+              final countryCodeMatch = RegExp(r'countryCode:\s*([0-9]+)').firstMatch(rawPhone);
+              final nsnMatch = RegExp(r'nsn:\s*([0-9]+)').firstMatch(rawPhone);
+              if (countryCodeMatch != null && nsnMatch != null) {
+                _savedPhoneCode = countryCodeMatch.group(1) ?? '';
+                _savedPhoneNum = nsnMatch.group(1) ?? '';
+              } else {
+                _savedPhoneCode = '';
+                _savedPhoneNum = rawPhone;
+              }
+            } else {
+              _savedPhoneCode = '';
+              _savedPhoneNum = rawPhone;
+            }
+
+            _savedBirthday = data['birthday'] ?? '';
+            _selectedAddressTitle = data['address'] ?? '';
+
+            // Update controllers
+            _nameController.text = _savedName;
+            _phoneCodeController.text = _savedPhoneCode;
+            _phoneNumController.text = _savedPhoneNum;
+            _birthdayController.text = _savedBirthday;
+            _isLoading = false;
+          });
+        } else {
+          setState(() {
+            _savedEmail = user.email ?? 'user@example.com';
+            _isLoading = false;
+          });
+        }
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _saveUserData() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final phoneStr = _phoneCodeController.text.isNotEmpty
+            ? '+${_phoneCodeController.text.replaceAll('+', '')} ${_phoneNumController.text}'
+            : _phoneNumController.text;
+
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'nem': _nameController.text,
+          'phone': phoneStr,
+          'birthday': _birthdayController.text,
+          'address': _selectedAddressTitle,
+          'email': _savedEmail,
+        }, SetOptions(merge: true));
+
+        setState(() {
+          _savedName = _nameController.text;
+          _savedPhoneCode = _phoneCodeController.text;
+          _savedPhoneNum = _phoneNumController.text;
+          _savedBirthday = _birthdayController.text;
+          _isEditing = false;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
+          child: CircularProgressIndicator(
+            color: AppColors.lightPrimary500,
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _isEditing
@@ -63,16 +186,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                   _isEditing = false;
                 });
               },
-              onSave: () {
-                setState(() {
-                  // Save controller values
-                  _savedName = _nameController.text;
-                  _savedPhoneCode = _phoneCodeController.text;
-                  _savedPhoneNum = _phoneNumController.text;
-                  _savedBirthday = _birthdayController.text;
-                  _isEditing = false;
-                });
-              },
+              onSave: _saveUserData,
             )
           : AppBar(
               backgroundColor: Colors.white,
@@ -177,7 +291,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
               ),
               const Gap(4),
               Text(
-                'daniel.jones@example.com',
+                _savedEmail,
                 style: AppTextStyle.poppins14.copyWith(
                   color: AppColors.darkGrey300,
                   fontWeight: FontWeight.w500,
@@ -185,7 +299,9 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
               ),
               const Gap(6),
               Text(
-                '+$_savedPhoneCode $_savedPhoneNum',
+                _savedPhoneCode.isNotEmpty
+                    ? '+$_savedPhoneCode $_savedPhoneNum'
+                    : _savedPhoneNum,
                 style: AppTextStyle.poppins16Bold.copyWith(
                   color: AppColors.darkGrey300,
                   fontWeight: FontWeight.w600,
@@ -279,7 +395,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
       child: Row(
         children: [
-          // Code code "405"
+          // Code code
           SizedBox(
             width: 80,
             child: TextField(
@@ -312,7 +428,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
             ),
           ),
           const Gap(10),
-          // Number "555-0128"
+          // Number
           Expanded(
             child: TextField(
               controller: _phoneNumController,
@@ -377,7 +493,9 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
             children: [
               Expanded(
                 child: Text(
-                  'Address - $_selectedAddressTitle',
+                  _selectedAddressTitle.isNotEmpty
+                      ? 'Address - $_selectedAddressTitle'
+                      : 'Select Address',
                   style: AppTextStyle.poppins16.copyWith(
                     color: Colors.black87,
                     fontWeight: FontWeight.w500,

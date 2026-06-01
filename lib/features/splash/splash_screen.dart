@@ -1,4 +1,5 @@
 import 'package:bobo/core/consts/routes/routes.dart';
+import 'package:bobo/services/firebase/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -18,7 +19,12 @@ class _SplashScreenState extends State<SplashScreen> {
   void _navigateToOnBoarding() {
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
-        Navigator.pushReplacementNamed(context, AppRoutes.onBoarding);
+        final user = AuthService().currentUser;
+        if (user != null) {
+          Navigator.pushReplacementNamed(context, AppRoutes.mainNav);
+        } else {
+          Navigator.pushReplacementNamed(context, AppRoutes.onBoarding);
+        }
       }
     });
   }

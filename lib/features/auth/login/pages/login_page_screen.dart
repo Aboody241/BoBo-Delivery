@@ -132,40 +132,22 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                       const Spacer(),
 
                       _LoginButton(
-                        onPressed: () {
-                          Navigator.pushNamedAndRemoveUntil(
-                            context,
-                            AppRoutes.mainNav,
-                            (route) => false,
-                          );
-                        },
-                        child: Text(
-                          'Log in',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'Poppins',
-                          ),
-                        ),
-
-                        // onPressed:
-                        // (isButtonEnabled && !isloading)
-                        //     ? () {
-                        //         login();
-                        //       }
-                        //     : null,
-                        // child: isloading
-                        //     ? CircularProgressIndicator()
-                        //     : Text(
-                        //         'Log in',
-                        //         style: TextStyle(
-                        //           color: Colors.white,
-                        //           fontSize: 18,
-                        //           fontWeight: FontWeight.w700,
-                        //           fontFamily: 'Poppins',
-                        //         ),
-                        //       ),
+                        onPressed: (isButtonEnabled && !isloading)
+                            ? () {
+                                login();
+                              }
+                            : null,
+                        child: isloading
+                            ? const CircularProgressIndicator(color: Colors.white)
+                            : const Text(
+                                'Log in',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
                       ),
 
                       const Gap(5),

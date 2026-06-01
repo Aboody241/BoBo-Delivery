@@ -6,6 +6,8 @@ import 'package:bobo/core/consts/widgets/custom_forms.dart';
 import 'package:bobo/core/consts/widgets/titled_text.dart';
 import 'package:bobo/features/profile/widgets/phone_form.dart';
 import 'package:bobo/features/profile/widgets/upload_profile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:phone_form_field/phone_form_field.dart';
@@ -24,6 +26,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   PhoneController phoneController = PhoneController();
 
   bool isvalid = false;
+  bool _isLoading = false;
 
   // void validator() {
   //   setState(() {
@@ -86,15 +89,51 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
               ),
               Gap(80),
               EnabledButton(
-                onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    AppRoutes.mainNav,
-                    (route) => false,
-                  );
-                },
+                onPressed: _isLoading
+                    ? null
+                    : () async {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        try {
+                          final user = FirebaseAuth.instance.currentUser;
+                          if (user != null) {
+                            await FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(user.uid)
+                                .set({
+                              'nem': nameController.text.trim(),
+                              'birthday': birthController.text.trim(),
+                              'address': addressController.text.trim(),
+                              'phone': phoneController.value != null
+                                  ? '+${phoneController.value!.countryCode} ${phoneController.value!.nsn}'
+                                  : '',
+                              'email': user.email ?? '',
+                            }, SetOptions(merge: true));
+                          }
+                          if (mounted) {
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              AppRoutes.mainNav,
+                              (route) => false,
+                            );
+                          }
+                        } catch (e) {
+                          if (mounted) {
+                            setState(() {
+                              _isLoading = false;
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text('Failed to save profile: $e')),
+                            );
+                          }
+                        }
+                      },
                 hei: 55,
-                child: Text('Continue', style: ButtonTextStyle.button),
+                child: _isLoading
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : Text('Continue', style: ButtonTextStyle.button),
               ),
             ],
           ),
