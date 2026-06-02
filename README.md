@@ -159,9 +159,9 @@ flutter run
 
 ## 📱 Screenshots (Placeholder)
 
-| Onboarding | Login | Home Screen | Cart |
-|:---:|:---:|:---:|:---:|
-| <img src="https://via.placeholder.com/200x400.png?text=Onboarding" width="180" /> | <img src="https://via.placeholder.com/200x400.png?text=Login" width="180" /> | <img src="https://via.placeholder.com/200x400.png?text=Home" width="180" /> | <img src="https://via.placeholder.com/200x400.png?text=Cart" width="180" /> |
+| Onboarding | Login | Home Screen | Cart | Profile |
+|:---:|:---:|:---:|:---:|:---:|
+| <img src="screenshots/onboard.png" width="180" /> | <img src="screenshots/login.png" width="180" /> | <img src="screenshots/home.png" width="180" /> | <img src="screenshots/cart.png" width="180" /> | <img src="screenshots/profile.png" width="180" /> |
 
 ---
 
